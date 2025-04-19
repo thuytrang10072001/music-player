@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "playlist_songs",
+  "info": {
+    "singularName": "playlist-song",
+    "pluralName": "playlist-songs",
+    "displayName": "Playlist_Song"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "song_id": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::song.song",
+      "inversedBy": "playlist_songs"
+    },
+    "playlist_id": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::playlist.playlist",
+      "inversedBy": "playlist_songs"
+    }
+  }
+}

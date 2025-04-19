@@ -1,0 +1,52 @@
+.logo {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .nav-frame {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    flex-shrink: 0;
+    background-color: var(--background);
+    font-weight: bold;
+    border-radius: 10px;
+  }
+  
+  .nav-folder label{
+    font-size: 20px;
+  }
+  
+  .nav-list {
+    padding: 1rem 0;
+  }
+    
+  .nav-item {
+    width: 100%;
+    height: 45px;
+  }
+  
+  .nav-icon {
+    margin-right: 10px;
+  }
+  
+  .nav-item-link{
+    color: var(--text-color);
+    width: auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+  }
+  
+  .nav-active {
+    text-decoration-line: none;
+    background: var(--primary-gradient);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+  
+  .nav-no-active {
+    text-decoration-line: none;
+  }
+  

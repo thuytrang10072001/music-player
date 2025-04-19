@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "playlists",
+  "info": {
+    "singularName": "playlist",
+    "pluralName": "playlists",
+    "displayName": "Playlist"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "user_id": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "playlists"
+    },
+    "name": {
+      "type": "string"
+    },
+    "create_date": {
+      "type": "date"
+    },
+    "playlist_songs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::playlist-song.playlist-song",
+      "mappedBy": "playlist_id"
+    }
+  }
+}

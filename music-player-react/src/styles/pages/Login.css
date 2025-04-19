@@ -1,0 +1,8 @@
+.btn-login{
+    width: 50%;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    gap: 0.5rem;
+}

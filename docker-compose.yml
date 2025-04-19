@@ -1,0 +1,81 @@
+version: '3'
+services:
+  frontend:
+    container_name: music-player-react
+    build:
+      context: ./music-player-react
+    ports:
+      - "8000:80"
+      - "443:443"
+    volumes:
+      - ./music-player-react/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./music-player-react:/app/frontend
+    restart: unless-stopped
+
+#  fe-react-router:
+#    container_name: fe-react
+#    build:
+#      context: ./fe-react
+#    ports:
+#      - "8000:80"
+#      - "443:443"
+#    volumes:
+#      - ./fe-react/nginx.conf:/etc/nginx/conf.d/default.conf
+#      - ./fe-react:/app
+#    restart: unless-stopped
+
+  backend:
+    container_name: backend
+    build:
+      context: ./lavarel
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: ${DATABASE_NAME}
+      DB_USERNAME: ${DATABASE_USERNAME}
+      DB_PASSWORD: ${DATABASE_PASSWORD}
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+    volumes:
+      - ./lavarel:/app/backend
+    networks:
+      - app
+
+  db:
+    container_name: postgres
+    restart: always
+    env_file: .env
+    image: postgres:17
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - ./db_data:/var/lib/postgresql/data/ #using a volume
+      - ./init_schema:/docker-entrypoint-initdb.d
+    ports:
+      - '5432:5432'
+    networks:
+      - app
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - '9090:8080'
+    environment:
+      - ADMINER_DEFAULT_SERVER=db
+    networks:
+      - app
+    depends_on:
+      - db
+
+volumes:
+  data_db:
+
+networks:
+  app:
+    driver: bridge

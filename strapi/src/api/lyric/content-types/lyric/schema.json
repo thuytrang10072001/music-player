@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "lyrics",
+  "info": {
+    "singularName": "lyric",
+    "pluralName": "lyrics",
+    "displayName": "Lyric"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "song_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::song.song",
+      "inversedBy": "lyric"
+    },
+    "content": {
+      "type": "blocks"
+    },
+    "timestamp": {
+      "type": "integer"
+    }
+  }
+}
