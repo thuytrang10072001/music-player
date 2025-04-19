@@ -4,7 +4,6 @@ A full-stack music streaming platform built with **ReactJS** (frontend) and **La
 
 ## 🎥 Demo
 
-https://www.youtube.com/watch?v=HccU2Sn2tHU&t=5s
 ---
 
 ## 🚀 Features
@@ -43,6 +42,6 @@ https://www.youtube.com/watch?v=HccU2Sn2tHU&t=5s
 #### 1. Clone the project
 
 ```bash
-git clone https://github.com/yourusername/music-player-app.git
-cd music-player-app
+git clone https://github.com/thuytrang10072001/music-player.git
+cd music-player-react
 
