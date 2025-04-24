@@ -22,7 +22,7 @@ A full-stack music streaming platform built with **ReactJS** (frontend) and **La
 
 | Layer        | Technology                        |
 |--------------|-----------------------------------|
-| Frontend     | ReactJS, Axios, Tailwind, Reducx  |
+| Frontend     | ReactJS, Axios, Tailwind, Redux  |
 | Backend      | Laravel, PHP                      |
 | Database     | PostgreSQL                        |
 | Auth         | Laravel Sanctum                   |
