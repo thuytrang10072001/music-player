@@ -1,1 +1,16 @@
 @import url("../styles/Sidebar.css");
+
+.dropdown-toggle, .dropdown-toggle .btn-success,
+.btn.show, .dropdown-toggle.btn:active{
+    border: none;
+    background-color: transparent;
+    padding: 0;
+}
+
+.dropdown-toggle:hover{
+    background-color: transparent;
+}
+
+#dropdown-split-basic::after{
+    display: none !important;
+}

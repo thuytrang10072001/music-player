@@ -3,8 +3,8 @@ import { FaGithub } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { Form, Button } from "react-bootstrap";
 
-import ButtonLogin from "../components/button/ButtonLogin";
 import FrameForm from "../components/FrameForm";
+import GoogleLoginButton from "../components/GoogleLogin";
 
 export default function Register(){
     return(
@@ -40,9 +40,12 @@ export default function Register(){
                     <span className="text-white text-sm whitespace-nowrap">Hoặc tiếp tục với</span>
                     <div className="flex-grow h-px bg-white"></div>
                 </div>
-                <div className="grid grid-cols-1 sml:grid-cols-2 gap-3 mt-4">
-                    <ButtonLogin icon={<FcGoogle className="text-2xl"/>} title="Google"/>
-                    <ButtonLogin icon={<FaGithub className="text-2xl"/>} title="Github"/>
+                {/*<div className="grid grid-cols-1 sml:grid-cols-2 gap-3 mt-4">*/}
+                {/*    <GoogleLoginButton icon={<FcGoogle className="text-2xl"/>} title="Google"/>*/}
+                {/*    <ButtonLogin icon={<FaGithub className="text-2xl"/>} title="Github"/>*/}
+                {/*</div>*/}
+                <div className="mt-4 grid grid-cols-1">
+                    <GoogleLoginButton icon={<FcGoogle className="text-2xl"/>} title="Google"/>
                 </div>
             </Form>
         </FrameForm>

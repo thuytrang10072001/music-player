@@ -7,6 +7,7 @@ import partySNSD from "../assets/images/snsd/party.jpg";
 import CardArtist from "../components/card/CardArtist";
 import CardAlbum from "../components/card/CardAlbum";
 import Header from "../components/Header";
+import CardSong from "../components/card/CardSong";
 export default function Home() {
   return (
       <Layout>
@@ -50,7 +51,7 @@ export default function Home() {
                           className="main-list w-full overflow-x-auto overflow-y-hidden whitespace-nowrap py-4 px-2 hide-scrollbar">
                           <div className="flex">
                               {[...Array(10)].map((_, index) => (
-                                  <CardAlbum/>
+                                  <CardSong/>
                               ))}
                           </div>
                       </div>

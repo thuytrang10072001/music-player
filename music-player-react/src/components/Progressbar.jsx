@@ -2,15 +2,29 @@ import React, { useRef, useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { FaAnglesLeft, FaAnglesRight, FaCirclePlay,
     FaVolumeHigh,FaVolumeLow, FaVolumeXmark, FaCirclePause } from "react-icons/fa6";
+import { useSelector, useDispatch } from 'react-redux';
 
+import {togglePlay, pause, play, setVolume, setCurrentTime} from '../store/MusicPlayerSlice';
 import song from "../assets/audio/song.mp3";
 import { btnIcon } from "../utils/helper";
 
 const ProgressBar = () => {
     const audioRef = useRef(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [volume, setVolume] = useState(1);
-    const [currentTime, setCurrentTime] = useState(0);
+    const { isPlaying, volume, currentTime, currentSong } = useSelector(state => state.musicPlayer);
+    const dispatch = useDispatch();
+
+    const handleTogglePlay = () => {
+        if (!audioRef.current) return;
+
+        if (isPlaying) {
+            audioRef.current.pause();
+        } else {
+            audioRef.current.play();
+        }
+
+        dispatch(togglePlay());
+    };
+
     const [duration, setDuration] = useState(0);
     const [showVolumeSlider, setShowVolumeSlider] = useState(false);
 
@@ -32,21 +46,9 @@ const ProgressBar = () => {
     const handleTimeUpdate = () => {
         const audio = audioRef.current;
         if (audio) {
-            setCurrentTime(audio.currentTime);
+            dispatch(setCurrentTime(audio.currentTime));
             setDuration(audio.duration || 0);
         }
-    };
-
-    const handleTogglePlay = () => {
-        if (!audioRef.current) return;
-
-        if (isPlaying) {
-            audioRef.current.pause();
-        } else {
-            audioRef.current.play();
-        }
-
-        setIsPlaying(!isPlaying);
     };
 
     const toggleVolumeSlider = () => {
@@ -57,12 +59,14 @@ const ProgressBar = () => {
 
     const handleAudioEnded = () => {
         setCurrentTime(0);
-        setIsPlaying(false);
+        dispatch(pause());
     };
 
     const handleVolumeChange = (e) => {
         const vol = parseFloat(e.target.value);
-        setVolume(vol);
+
+        dispatch(setVolume(vol));
+
         if (audioRef.current) {
             audioRef.current.volume = vol;
         }
@@ -84,7 +88,7 @@ const ProgressBar = () => {
             {/* Audio element */}
             <audio
                 ref={audioRef}
-                src={song}
+                src={currentSong.audio}
                 onTimeUpdate={handleTimeUpdate}
                 onLoadedMetadata={handleTimeUpdate}
                 onEnded={handleAudioEnded}

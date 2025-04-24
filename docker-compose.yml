@@ -11,6 +11,8 @@ services:
       - ./music-player-react/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./music-player-react:/app/frontend
     restart: unless-stopped
+    networks:
+      - app
 
 #  fe-react-router:
 #    container_name: fe-react
@@ -42,6 +44,7 @@ services:
       - ./lavarel:/app/backend
     networks:
       - app
+    command: php artisan serve --host=0.0.0.0 --port=8080
 
   db:
     container_name: postgres

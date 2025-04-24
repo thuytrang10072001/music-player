@@ -7,7 +7,7 @@ WORKDIR /app/frontend
 COPY package*.json ./
 
 # Install dependencies with forced architecture
-RUN npm install --legacy-peer-deps
+RUN npm install --legacy-peer-deps --fetch-timeout=60000 --fetch-retries=5
 
 COPY . .
 RUN npm run build
