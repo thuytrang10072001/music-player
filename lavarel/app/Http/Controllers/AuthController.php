@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
 use App\Models\User;
 
 
@@ -43,10 +45,15 @@ class AuthController extends Controller
                 'data' => $user
             ], 200);
 
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Dữ liệu không hợp lệ',
+                'errors'  => $e->errors(),
+            ], 422);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error',
-                'error' => $e->getMessage()
+                'message' => 'Lỗi server',
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -64,6 +71,44 @@ class AuthController extends Controller
             }
 
             $user = Auth::user();
+            $token = $user->createToken('access-token')->plainTextToken;
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'User logged in successfully',
+                'name' => $user->name,
+                'token' => $token
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function socialLogin(Request $request): JsonResponse
+    {
+        try {
+            $validated = $request->validate([
+                'email' => 'required|email|max:255',
+                'name' => 'nullable|string|max:255',
+                'provider' => 'required|string|in:google,github',
+                'picture' => 'nullable|string',
+            ]);
+
+            $user = User::where('email', $validated['email'])->first();
+
+            if (!$user) {
+                $user = User::create([
+                    'email' => $validated['email'],
+                    'name' => $validated['name'] ?? 'No Name',
+                    'provider' => $validated['provider'],
+                    'picture' => $validated['picture'] ?? null,
+                    'password' => bcrypt(Str::random(12))
+                ]);
+            }
             $token = $user->createToken('access-token')->plainTextToken;
 
             return response()->json([

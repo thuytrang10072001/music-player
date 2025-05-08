@@ -85,7 +85,7 @@ const ProgressBar = () => {
 
     return (
         <div className="space-y-2 w-full max-w-lg mx-auto">
-            {/* Audio element */}
+             {/*Audio element*/}
             <audio
                 ref={audioRef}
                 src={currentSong.audio}
@@ -105,11 +105,11 @@ const ProgressBar = () => {
                         step="0.01"
                         value={volume}
                         onChange={handleVolumeChange}
-                        className="w-24 accent-cyan-500"
+                        className="w-24 accent-cyan-50"
                     />
                 )}
                 <Button className={btnIcon()} onClick={toggleVolumeSlider}>
-                    { volume === 0 ?
+                    {volume === 0 ?
                         <FaVolumeXmark/> : volume < 0.5 ?
                             <FaVolumeLow/> : <FaVolumeHigh/>
                     }
@@ -119,7 +119,7 @@ const ProgressBar = () => {
             <div className="relative" onClick={handleSeek}>
                 <div className="bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                     <div
-                        className="bg-cyan-500 dark:bg-cyan-400 h-2 transition-all duration-200"
+                        className="bg-slate-900 dark:bg-slate-950 h-2 transition-all duration-200"
                         style={{width: `${progress}%`}}
                         role="progressbar"
                         aria-valuenow={currentTime}
@@ -128,11 +128,11 @@ const ProgressBar = () => {
                     />
                 </div>
                 <div
-                    className="ring-cyan-500 dark:ring-cyan-400 ring-2 absolute"
+                    className="bg-transparent absolute"
                     style={{left: `${progress}%`, top: "50%", transform: "translate(-50%, -50%)"}}
                 >
                     <div className="w-4 h-4 flex items-center justify-center bg-white rounded-full shadow">
-                        <div className="w-1.5 h-1.5 bg-cyan-500 dark:bg-cyan-400 rounded-full"/>
+                        <div className="w-1.5 h-1.5 bg-slate-900 dark:bg-slate-950 rounded-full"/>
                     </div>
                 </div>
             </div>
@@ -140,7 +140,7 @@ const ProgressBar = () => {
             {/* Time display */}
             <div className="flex justify-between text-sm leading-6 font-medium tabular-nums">
                 <div className="text-cyan-500 dark:text-slate-100">{formatTime(currentTime)}</div>
-                <div className="text-slate-500 dark:text-slate-400">{formatTime(duration)}</div>
+                <div className="text-slate-100">{formatTime(duration)}</div>
             </div>
 
             <div className="btn-action w-full max-w-xs mx-auto flex justify-content-between">

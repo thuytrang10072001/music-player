@@ -7,16 +7,43 @@ import PlayList from "../pages/PlayList";
 import Player from "../pages/Player";
 import Register from "../pages/Register";
 import ForgotPass from "../pages/ForgotPass";
+import PrivateRoute from "./PrivateRoute";
+import AuthRedirect from "./AuthRedirect";
+
 export default function Routers() {
   return (
     <Router>
         <Routes>
             <Route path='/' element={<Home/>} />
-            <Route path='/sign-in' element={<Login/>} />
-            <Route path='/sign-up' element={<Register/>} />
-            <Route path='/forgot-password' element={<ForgotPass/>} />
+            <Route path='/sign-in'
+                   element={
+                       <AuthRedirect>
+                           <Login />
+                       </AuthRedirect>
+                   }
+            />
+            <Route path='/sign-up'
+                   element={
+                       <AuthRedirect>
+                           <Register />
+                       </AuthRedirect>
+                   }
+            />
+            <Route path='/forgot-password'
+                   element={
+                       <AuthRedirect>
+                           <ForgotPass />
+                       </AuthRedirect>
+                   }
+            />
             <Route path='/play-music' element={<Player/>}/>
-            <Route path='/play-list' element={<PlayList/>} />
+            <Route path='/play-list'
+                   element={
+                       <PrivateRoute>
+                           <PlayList />
+                       </PrivateRoute>
+                   }
+            />
         </Routes>
     </Router>
   )

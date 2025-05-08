@@ -25,7 +25,7 @@ module.exports = {
       },
 
       backgroundImage: {
-        linearPrimary: "linear-gradient(to right, #a8cf45, #0098da)",
+        linearPrimary: "linear-gradient(to top, #30cfd0, #330867)",
         linearWhiteBlack: "linear-gradient(rgba(255, 255, 255, 0.1) 0%, rgb(0, 0, 0) 100%)"
       },
 

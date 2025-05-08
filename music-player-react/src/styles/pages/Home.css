@@ -10,3 +10,19 @@
     -ms-overflow-style: none;  /* IE & Edge */
     scrollbar-width: none;     /* Firefox */
 }
+.custom-scrollbar::-webkit-scrollbar {
+    height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--primary-gradient);
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-gradient);
+}

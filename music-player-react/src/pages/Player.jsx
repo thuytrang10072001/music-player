@@ -1,10 +1,12 @@
 import React, { useRef, useState } from 'react';
+import { useSelector } from "react-redux";
 
 import Layout from "../components/Layout";
 import Progressbar from "../components/Progressbar";
-import partySNSD from "../assets/images/snsd/party.jpg";
 
 export default function Player() {
+    const { currentSong } = useSelector(state => state.musicPlayer);
+
 
     const css = {
         nameSong: "name song text-2xl font-bold",
@@ -13,13 +15,25 @@ export default function Player() {
 
     return(
         <Layout>
-            <div className="player w-full max-h-screen h-screen bg-bg">
-                <div className="py-4 h-full flex flex-column justify-content-between">
+            <div className="player w-full max-h-screen h-screen bg-linearPrimary">
+                {/*<div className="py-4 h-full flex">*/}
+                {/*    <Button className={btnIcon()}>*/}
+                {/*        <FaAnglesLeft className={css.icon}/>*/}
+                {/*    </Button>*/}
+                {/*    <iframe style={{borderRadius: "12px"}}*/}
+                {/*            src={currentSong.file_src}*/}
+                {/*            width="50%"*/}
+                {/*            height="352" frameBorder="0" allowFullScreen=""*/}
+                {/*            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"*/}
+                {/*            loading="lazy">*/}
+                {/*    </iframe>*/}
+                {/*</div>*/}
+                <div className="py-4 h-full flex flex-column justify-content-between ">
                     <div className="info-song">
                         <div className="avatar">
                             <img
                                 alt="name"
-                                src={partySNSD}
+                                src={currentSong.img}
                                 className="w-1/4 h-1/4 rounded-xl mx-auto"/>
                         </div>
                         <div className="lyrics">

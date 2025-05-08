@@ -6,7 +6,6 @@
   .nav-frame {
     display: flex;
     flex-direction: column;
-    width: 300px;
     flex-shrink: 0;
     background-color: var(--background);
     font-weight: bold;

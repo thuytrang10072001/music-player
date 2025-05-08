@@ -10,7 +10,7 @@ class Song extends Model
     protected $primaryKey = 'song_id';
     public $timestamps = false;
 
-    protected $fillable = ['title', 'duration', 'album_id', 'artist_id', 'file_path'];
+    protected $fillable = ['title', 'duration', 'album_id', 'artist_id', 'file_path', 'spotify_id', 'picture'];
 
     public function album()
     {

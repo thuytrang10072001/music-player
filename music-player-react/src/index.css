@@ -5,7 +5,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-  --primary-gradient: linear-gradient(to right, #a8cf45, #0098da);
+  --primary-gradient: linear-gradient(to top, #30cfd0, #330867);
   --background: #121212;
   --text-color: #fff;
 }

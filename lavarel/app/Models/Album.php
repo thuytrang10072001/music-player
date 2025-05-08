@@ -10,7 +10,7 @@ class Album extends Model
     protected $primaryKey = 'album_id';
     public $timestamps = false;
 
-    protected $fillable = ['title', 'release_date', 'artist_id'];
+    protected $fillable = ['title', 'release_date', 'artist_id', 'spotify_id', 'picture'];
 
     public function artist()
     {

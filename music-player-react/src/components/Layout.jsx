@@ -4,9 +4,11 @@ import Header from './Header'
 
 const Layout = ({children}) => {
   return (
-    <div className='main-layout h-auto flex gap-2 p-2.5 w-full'>
+    <div className='main-layout row'>
         <Sidebar />
-        {children}
+        <div className="col-9 min-h-svh">
+            {children}
+        </div>
     </div>
   )
 }

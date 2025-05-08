@@ -40,15 +40,15 @@ const Sidebar = () => {
 
   return (
     <div
-      className="nav-frame w-20 min-h-screen"
+      className="nav-frame col-3 p-0 min-h-screen"
     >
         <div className="logo">
-            <img src={logo} alt="Logo" style={{width: "250px"}}/>
+            <img src={logo} alt="Logo" style={{width: "250px"}} className="m-auto"/>
         </div>
         <div style={{marginLeft: "30px"}}>
             { 
                 manager.map((item, index) => (
-                    <div className="nav-folder">
+                    <div className="nav-folder" key={`role-${index}`}>
                         <label>{item.label}</label>
                         <div className="nav-list">
                             {item.items.map((nav, index) => (

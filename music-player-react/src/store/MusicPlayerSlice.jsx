@@ -8,7 +8,8 @@ const initialState = {
         name: "Into the new word",
         artist: "SNSD",
         img: partySNSD,
-        audio: itnw
+        audio: `/storage/songs/Girls' Generation 소녀시대 'Lion Heart' MV.mp3`,
+        file_src: "https://open.spotify.com/embed/track/1RTW9UthqmZwr8Od6CH4i8?utm_source=generator"
     },
     playlist: [],
     isPlaying: false,
