@@ -19,7 +19,7 @@ body {
     background-color: black;
     font-family: "Montserrat", serif;
     color: var(--text-color);
-    overflow-x: hidden;
+    overflow: auto;
 }
 
 #root{

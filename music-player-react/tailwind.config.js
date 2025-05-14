@@ -26,6 +26,7 @@ module.exports = {
 
       backgroundImage: {
         linearPrimary: "linear-gradient(to top, #30cfd0, #330867)",
+        linearSecondary: "linear-gradient(to top, #a8cf45, #0098da)",
         linearWhiteBlack: "linear-gradient(rgba(255, 255, 255, 0.1) 0%, rgb(0, 0, 0) 100%)"
       },
 
@@ -45,8 +46,8 @@ module.exports = {
         textLight: "#ccd6f6",
         textDark: "#8892b0",
         bgHeader: "#585858",
-        'gradient-start': '#a8cf45',
-        'gradient-end': '#0098da',
+        gradientStart: '#a8cf45',
+        gradientEnd: '#0098da',
         hoverColor: "rgba(100,255,218,0.1)",
       },
     },

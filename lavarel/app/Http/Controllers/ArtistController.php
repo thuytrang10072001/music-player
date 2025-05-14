@@ -8,9 +8,14 @@ use Illuminate\Http\Request;
 
 class ArtistController extends Controller
 {
-    public function index(): JsonResponse{
+    public function index(Request $request): JsonResponse
+    {
+        $limit = (int) $request->query('limit', 50);
+        $limit = max(1, min($limit, 100));
+
         try{
-            $artists = Artist::all();
+            $artists = Artist::paginate($limit);
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Arists fetched successfully',

@@ -8,10 +8,12 @@ use Illuminate\Http\JsonResponse;
 
 class AlbumController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $limit = $request->query('limit', 50);
+
         try{
-            $albums =  Album::with('artist')->get();
+            $albums =  Album::with('artist')->paginate($limit);
             return response()->json([
                 'status' => 'success',
                 'message' => 'Albums fetched successfully',
