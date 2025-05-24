@@ -25,7 +25,9 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('album')->group(function () {
     Route::get('/', [AlbumController::class, 'index']);
-    Route::get('/{album}', [AlbumController::class, 'show']);
+    Route::get('/{id}', [AlbumController::class, 'show']);
+    Route::get('/{id}/related', [AlbumController::class, 'relatedAlbums']);
+
 });
 
 Route::prefix('artist')->group(function () {

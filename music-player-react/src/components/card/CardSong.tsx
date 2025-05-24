@@ -1,19 +1,10 @@
 import React from 'react';
+import { FaCirclePlay } from "react-icons/fa6";
 
+import { PropsSong } from "@interfaces/index";
 import DropdownMenu from "../DropdownMenu";
-import {FaCirclePlay} from "react-icons/fa6";
 
-interface Props {
-    data: {
-        picture: string,
-        title: string,
-        artist: {
-            name: string
-        }
-    }
-}
-
-export default function CardSong (props: Props){
+export default function CardSong (props: PropsSong){
     const { data } = props;
 
     return (

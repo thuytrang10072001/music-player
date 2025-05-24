@@ -1,15 +1,19 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
+import PrivateRoute from "./PrivateRoute";
+import AuthRedirect from "./AuthRedirect";
 import Home from "../pages/Home";
 import Login from "../pages/Login"
 import PlayList from "../pages/PlayList";
 import Player from "../pages/Player";
 import Register from "../pages/Register";
 import ForgotPass from "../pages/ForgotPass";
-import PrivateRoute from "./PrivateRoute";
-import AuthRedirect from "./AuthRedirect";
-import Detail from "../pages/Detail";
+import ListArtist from "../pages/ListArtist";
+import DetailAlbum from "../pages/DetailAlbum";
+import ListAlbum from "../pages/ListAlbum";
+import ListSong from "../pages/ListSong";
+import DetailArtist from "../pages/DetailArtist";
 
 export default function Routers() {
   return (
@@ -38,7 +42,11 @@ export default function Routers() {
                    }
             />
             <Route path='/play-music' element={<Player/>}/>
-            <Route path='/detail-albums' element={<Detail/>}/>
+            <Route path='/list-albums' element={<ListAlbum/>}/>
+            <Route path='/list-songs' element={<ListSong/>}/>
+            <Route path='/list-artists' element={<ListArtist/>}/>
+            <Route path='/detail-album/:id' element={<DetailAlbum/>}/>
+            <Route path='/detail-artist' element={<DetailArtist/>}/>
             {/*<Route path='/play-list'*/}
             {/*       element={*/}
             {/*           <PrivateRoute>*/}

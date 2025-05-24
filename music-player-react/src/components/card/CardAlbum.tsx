@@ -1,23 +1,18 @@
 import React from 'react';
+import { FaCirclePlay } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
-import {btnIcon} from "../../utils/helper";
-import {FaCirclePlay} from "react-icons/fa6";
+import { PropsAlbum } from "@interfaces/index";
 
-interface Props {
-    data: {
-        picture: string,
-        title: string,
-        artist: {
-            name: string
-        }
-    }
-}
-export default function CardAlbum (props: Props){
+export default function CardAlbum (props: PropsAlbum){
     const { data } = props;
+    const nav = useNavigate();
 
     return (
         <div
-            className="card-album group relative p-3 flex-shrink-0 max-w-fit rounded-lg transition duration-300 hover:bg-gray-800">
+            className="card-album group relative p-3 flex-shrink-0 max-w-fit rounded-lg transition duration-300 hover:bg-gray-800 cursor-pointer"
+            onClick={() => nav(`/detail-album/${data.album_id}`)}
+        >
             <div className="relative w-36 h-36">
                 <img
                     alt="name"

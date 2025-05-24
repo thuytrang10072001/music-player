@@ -1,22 +1,12 @@
 import React, {useState} from 'react'
 import { FaSquarePlus } from "react-icons/fa6";
-import { Button, Modal } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 import Layout from "../components/Layout";
-import Header from "../components/Header";
 import CardAlbum from "../components/card/CardAlbum";
 import ModalAddPlaylist from "../components/modal/ModalAddPlaylist";
 import { btnIcon } from "../utils/helper";
-
-interface ApiProps {
-    id: string,
-    name: string,
-    title: string,
-    picture: string,
-    artist: {
-        name: string
-    }
-}
+import { Album } from "@interfaces/index";
 
 export default function PlayList() {
     const [show, setShow] = useState(false);
@@ -24,59 +14,146 @@ export default function PlayList() {
 
     const test = [
         {
-            id: "dadadsadsdadsd",
+            album_id: "dsdssdagg",
+            spotify_id: "dadadsadsdadsd",
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
             artist: {
-                name: ""
+                name: "SNSD"
             }
         },
         {
-            id: "dadadsadsdadsd",
+            album_id: "dsdssdagg",
+            spotify_id: "dadadsadsdadsd",
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
             artist: {
-                name: ""
+                name: "SNSD"
             }
         },
         {
-            id: "dadadsadsdadsd",
+            album_id: "dsdssdagg",
+            spotify_id: "dadadsadsdadsd",
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
             artist: {
-                name: ""
+                name: "SNSD"
             }
         },
         {
-            id: "dadadsadsdadsd",
+            album_id: "dsdssdagg",
+            spotify_id: "dadadsadsdadsd",
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
             artist: {
-                name: ""
+                name: "SNSD"
             }
         },
         {
-            id: "dadadsadsdadsd",
+            album_id: "dsdssdagg",
+            spotify_id: "dadadsadsdadsd",
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
             artist: {
-                name: ""
+                name: "SNSD"
             }
         },
         {
-            id: "dadadsadsdadsd",
+            album_id: "dsdssdagg",
+            spotify_id: "dadadsadsdadsd",
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
             artist: {
-                name: ""
+                name: "SNSD"
             }
-        }
+        },
+        {
+            album_id: "dsdssdagg",
+            spotify_id: "dadadsadsdadsd",
+            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
+            title: "Into The New World",
+            name: "SNSD",
+            artist: {
+                name: "SNSD"
+            }
+        },
+        {
+            album_id: "dsdssdagg",
+            spotify_id: "dadadsadsdadsd",
+            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
+            title: "Into The New World",
+            name: "SNSD",
+            artist: {
+                name: "SNSD"
+            }
+        },
+        {
+            album_id: "dsdssdagg",
+            spotify_id: "dadadsadsdadsd",
+            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
+            title: "Into The New World",
+            name: "SNSD",
+            artist: {
+                name: "SNSD"
+            }
+        },
+        {
+            album_id: "dsdssdagg",
+            spotify_id: "dadadsadsdadsd",
+            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
+            title: "Into The New World",
+            name: "SNSD",
+            artist: {
+                name: "SNSD"
+            }
+        },
+        {
+            album_id: "dsdssdagg",
+            spotify_id: "dadadsadsdadsd",
+            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
+            title: "Into The New World",
+            name: "SNSD",
+            artist: {
+                name: "SNSD"
+            }
+        },
+        {
+            album_id: "dsdssdagg",
+            spotify_id: "dadadsadsdadsd",
+            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
+            title: "Into The New World",
+            name: "SNSD",
+            artist: {
+                name: "SNSD"
+            }
+        },
+        {
+            album_id: "dsdssdagg",
+            spotify_id: "dadadsadsdadsd",
+            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
+            title: "Into The New World",
+            name: "SNSD",
+            artist: {
+                name: "SNSD"
+            }
+        },
+        {
+            album_id: "dsdssdagg",
+            spotify_id: "dadadsadsdadsd",
+            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
+            title: "Into The New World",
+            name: "SNSD",
+            artist: {
+                name: "SNSD"
+            }
+        },
+
     ]
 
     return (
@@ -89,8 +166,8 @@ export default function PlayList() {
               </div>
               <div
                   className="main-list w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-                  {test.map((playPlist: ApiProps, index: number) => (
-                      <CardAlbum key={`album-${playPlist.id}`} data={playPlist} />
+                  {test.map((playPlist: Album, index: number) => (
+                      <CardAlbum key={`playlist-${index}`} data={playPlist} />
                   ))}
                   <div className="flex items-center justify-content-center p-7">
                       <Button className={btnIcon()}

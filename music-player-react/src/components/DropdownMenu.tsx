@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Dropdown, ButtonGroup } from "react-bootstrap";
-import {FaCirclePlay, FaEllipsisVertical} from "react-icons/fa6";
+import { FaEllipsisVertical } from "react-icons/fa6";
 import ModalPlaylist from "./modal/ModalPlayList";
 
 export default function DropdownMenu (){
@@ -12,7 +12,6 @@ export default function DropdownMenu (){
         <>
             <Dropdown as={ButtonGroup}>
                 <Dropdown.Toggle split id="dropdown-split-basic" >
-                    {/*<FaEllipsisVertical/>*/}
                     {FaEllipsisVertical({ className: ""})}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>

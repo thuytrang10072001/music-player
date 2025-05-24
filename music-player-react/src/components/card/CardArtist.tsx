@@ -1,13 +1,8 @@
 import React from 'react';
 
-interface Props {
-    data: {
-        picture: string,
-        name: string,
-    }
-}
+import { PropsArtist } from "@interfaces/index";
 
-export default function CardArtist (props: Props){
+export default function CardArtist (props: PropsArtist){
     const { data } = props;
 
     return (

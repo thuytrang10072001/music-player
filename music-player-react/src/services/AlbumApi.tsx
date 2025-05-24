@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import {BaseQueryArg, createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 
 export const AlbumApi = createApi({
     reducerPath: 'albumApi',
@@ -10,13 +10,19 @@ export const AlbumApi = createApi({
         getList: builder.query({
             query: ({page = 1, limit = 50}) => `?page=${page}&limit=${limit}`,
         }),
-        show: builder.mutation({
+        show: builder.query({
             query: (albumId) => ({
                 url: `/${albumId}`,
                 method: 'GET',
             }),
         }),
+        related: builder.query({
+            query: (id) => ({
+                url: `/${id}/related`,
+                method: 'GET'
+            })
+        })
     }),
 })
 
-export const  { useGetListQuery } = AlbumApi
+export const  { useGetListQuery, useShowQuery, useRelatedQuery } = AlbumApi
