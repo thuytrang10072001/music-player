@@ -1,177 +1,46 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Button } from "react-bootstrap";
 import { FiPlusCircle } from "react-icons/fi";
 import { FaRegClock } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import '../styles/pages/DetailArtist.css';
-import { Album } from "@interfaces/index";
+import {Album, Song} from "@interfaces/index";
 import Layout from "../components/Layout";
 import ModalPlaylist from "../components/modal/ModalPlayList";
-import SNSD from "../assets/images/snsd/party.jpg";
 import ButtonPlay from "../components/button/ButtonPlay";
 import CardAlbum from "../components/card/CardAlbum";
+import { useGetArtistByIdQuery } from "../services/ArtistApi";
+import { setLoading } from "../store/LoadingSlice";
+import { formatDuration } from "../utils/helper";
 
 export default function DetailArtist (){
     const nav =  useNavigate();
     const [showModal, setShowModal] = useState(false);
-
-    const handleShow = () => setShowModal(true);
-    const handleShowListAlbum = () => {
-        nav("/list-albums-related");
+    const { id } = useParams<{ id: string }>();
+    const { data, isFetching } = useGetArtistByIdQuery({id, page: 1, limit: 50});
+    const detailArtist = {
+        name: data?.artist?.name || '',
+        picture: data?.artist?.picture || '',
+        albums: data?.albums?.data || [],
+        songs: data?.songs?.data || []
     }
+    const handleShow = () => setShowModal(true);
 
-    const test = [
-        {
-            album_id: "dsdssdagg",
-            spotify_id: "dadadsadsdadsd",
-            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
-            title: "Into The New World",
-            name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
-        },
-        {
-            album_id: "dsdssdagg",
-            spotify_id: "dadadsadsdadsd",
-            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
-            title: "Into The New World",
-            name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
-        },
-        {
-            album_id: "dsdssdagg",
-            spotify_id: "dadadsadsdadsd",
-            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
-            title: "Into The New World",
-            name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
-        },
-        {
-            album_id: "dsdssdagg",
-            spotify_id: "dadadsadsdadsd",
-            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
-            title: "Into The New World",
-            name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
-        },
-        {
-            album_id: "dsdssdagg",
-            spotify_id: "dadadsadsdadsd",
-            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
-            title: "Into The New World",
-            name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
-        },
-        {
-            album_id: "dsdssdagg",
-            spotify_id: "dadadsadsdadsd",
-            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
-            title: "Into The New World",
-            name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
-        },
-        {
-            album_id: "dsdssdagg",
-            spotify_id: "dadadsadsdadsd",
-            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
-            title: "Into The New World",
-            name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
-        },
-        {
-            album_id: "dsdssdagg",
-            spotify_id: "dadadsadsdadsd",
-            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
-            title: "Into The New World",
-            name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
-        },
-        {
-            album_id: "dsdssdagg",
-            spotify_id: "dadadsadsdadsd",
-            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
-            title: "Into The New World",
-            name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
-        },
-        {
-            album_id: "dsdssdagg",
-            spotify_id: "dadadsadsdadsd",
-            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
-            title: "Into The New World",
-            name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
-        },
-        {
-            album_id: "dsdssdagg",
-            spotify_id: "dadadsadsdadsd",
-            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
-            title: "Into The New World",
-            name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
-        },
-        {
-            album_id: "dsdssdagg",
-            spotify_id: "dadadsadsdadsd",
-            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
-            title: "Into The New World",
-            name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
-        },
-        {
-            album_id: "dsdssdagg",
-            spotify_id: "dadadsadsdadsd",
-            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
-            title: "Into The New World",
-            name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
-        },
-        {
-            album_id: "dsdssdagg",
-            spotify_id: "dadadsadsdadsd",
-            picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
-            title: "Into The New World",
-            name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
-        },
+    const dispatch = useDispatch();
 
-    ]
+    useEffect(() => {
+        dispatch(setLoading(isFetching));
+    }, [isFetching, dispatch]);
 
     return (
         <Layout>
             <div className="flex-1 flex flex-col bg-bg overflow-hidden min-h-[calc(100vh-64px)]">
                 <div className="bg-artist h-64 p-4 flex items-center"
-                     style={{ backgroundImage: `url(${SNSD})` }}>
+                     style={{ backgroundImage: `url(${detailArtist.picture})` }}>
                     <div className="bg-artist-overlay"></div>
-                    <h1 className="text-7xl font-bold position-relative z-10">Girls' Generation</h1>
+                    <h1 className="text-7xl font-bold position-relative z-10">{detailArtist.name}</h1>
                 </div>
                 <div className="action px-4 py-3 flex items-center gap-3">
                     <ButtonPlay/>
@@ -202,17 +71,17 @@ export default function DetailArtist (){
                             </tr>
                             </thead>
                             <tbody>
-                            {[...Array(5)].map((_, index) =>
+                            {detailArtist.songs.map((song : Song, index : number) =>
                                 <tr>
                                     <th scope="row"
                                         className="px-6 py-2 font-medium whitespace-nowrap">
-                                        1
+                                        {index + 1}
                                     </th>
                                     <td className="px-6 py-2">
-                                        Lil’ Touch
+                                        {song.title}
                                     </td>
                                     <td className="px-6 py-2">
-                                        3:09
+                                        {formatDuration(song.duration)}
                                     </td>
                                 </tr>
                             )}
@@ -223,15 +92,10 @@ export default function DetailArtist (){
                 <div className="main-artists p-4">
                     <div className="main-title flex justify-content-between items-center py-2">
                         <div className="title font-semibold text-xl">Album liên quan</div>
-                        <Button className="bg-transparent border-0 text-xs"
-                                onClick={() => handleShowListAlbum()}
-                        >
-                            Hiện tất cả
-                        </Button>
                     </div>
                     <div className="main-list overflow-x-auto py-4 px-2 custom-scrollbar">
                         <div className="flex">
-                            {test.map((album: Album, index: number) => (
+                            {detailArtist.albums.map((album: Album, index: number) => (
                                 <CardAlbum key={`album-${album.spotify_id}`} data={album}/>
                             ))}
                         </div>

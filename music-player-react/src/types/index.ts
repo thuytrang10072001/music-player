@@ -2,15 +2,14 @@ export interface Artist {
     spotify_id: string,
     name: string,
     picture: string,
-    artist: {
-        name: string
-    }
+    artist_id: string,
 }
 
 export interface PropsArtist {
     data: {
         picture: string,
         name: string,
+        artist_id: string,
     }
 }
 

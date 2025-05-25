@@ -14,10 +14,13 @@ import DetailAlbum from "../pages/DetailAlbum";
 import ListAlbum from "../pages/ListAlbum";
 import ListSong from "../pages/ListSong";
 import DetailArtist from "../pages/DetailArtist";
+import ListAlbumRelated from "../pages/ListAlbumRelated";
+import ScrollToTop from "../components/ScrollToTop";
 
 export default function Routers() {
   return (
     <Router>
+        <ScrollToTop/>
         <Routes>
             <Route path='/' element={<Home/>} />
             <Route path='/sign-in'
@@ -46,7 +49,8 @@ export default function Routers() {
             <Route path='/list-songs' element={<ListSong/>}/>
             <Route path='/list-artists' element={<ListArtist/>}/>
             <Route path='/detail-album/:id' element={<DetailAlbum/>}/>
-            <Route path='/detail-artist' element={<DetailArtist/>}/>
+            <Route path='/detail-artist/:id' element={<DetailArtist/>}/>
+            <Route path='/related-albums/:id' element={<ListAlbumRelated/>}/>
             {/*<Route path='/play-list'*/}
             {/*       element={*/}
             {/*           <PrivateRoute>*/}

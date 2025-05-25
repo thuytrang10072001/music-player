@@ -63,7 +63,7 @@ class AlbumController extends Controller
             $album = Album::findOrFail($id);
 
             $relatedAlbums = Album::where('artist_id', $album->artist_id)
-                ->where('album_id', '!=', $album->id)
+                ->where('album_id', '!=', $album->album_id)
                 ->with('artist')
                 ->paginate($limit);
 

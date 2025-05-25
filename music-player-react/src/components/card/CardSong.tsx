@@ -15,6 +15,7 @@ export default function CardSong (props: PropsSong){
                     alt="name"
                     src={data?.picture}
                     className="w-36 h-36 rounded-xl object-cover"
+                    loading="lazy"
                 />
                 <button
                     className="rounded-xl absolute bottom-0 right-0 hidden group-hover:block transition duration-800"

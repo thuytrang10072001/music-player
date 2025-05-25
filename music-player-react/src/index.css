@@ -22,6 +22,24 @@ body {
     overflow: auto;
 }
 
+body::-webkit-scrollbar {
+    height: 5px;
+    width: 5px
+}
+
+body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: var(--primary-gradient);
+    border-radius: 4px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-gradient);
+}
+
 #root{
     height: 100%;
 }

@@ -1,18 +1,19 @@
 import React, {useState, useEffect} from "react";
-import { useLocation } from 'react-router-dom';
+import {useLocation, useParams} from 'react-router-dom';
 import { Pagination, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
 
 import Layout from "../components/Layout";
 import CardAlbum from "../components/card/CardAlbum";
-import { useGetListQuery } from "../services/AlbumApi";
+import { useRelatedQuery } from "../services/AlbumApi";
 import { setLoading } from "../store/LoadingSlice";
 import { Album } from "@interfaces/index";
 
 
-export default function ListAlbum (){
+export default function ListAlbumRelated (){
     const [ page, setPage ] = useState(1);
-    const { data, isFetching } = useGetListQuery({page: page, limit: 50});
+    const { id } = useParams<{ id: string }>();
+    const { data, isFetching } = useRelatedQuery({id, page: page, limit: 50});
     const totalPage = data?.list.last_page
 
     const dispatch = useDispatch();

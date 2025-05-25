@@ -28,4 +28,27 @@ class ArtistController extends Controller
             ], 500);
         }
     }
+
+    public function getAlbumsByArtistId(Request $request, int $id): JsonResponse
+    {
+        $limit = (int) $request->query('limit', 50);
+
+        try{
+            $artist = Artist::findOrFail($id);
+            $albums = $artist->albums()->paginate($limit);
+            $songs = $artist->songs()->paginate(10);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Artist fetched successfully',
+                'albums' => $albums,
+                'artist' => $artist,
+                'songs' => $songs
+            ]);
+        }catch (\Exception $e){
+            return response()->json([
+                'message' => 'Error fetching artists',
+                'error' => $e->getMessage()
+            ], 500);        }
+    }
 }

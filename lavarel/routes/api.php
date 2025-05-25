@@ -32,6 +32,8 @@ Route::prefix('album')->group(function () {
 
 Route::prefix('artist')->group(function () {
     Route::get('/', [ArtistController::class, 'index']);
+    Route::get('/{id}', [ArtistController::class, 'show']);
+    Route::get('/{id}/related', [ArtistController::class, 'getAlbumsByArtistId']);
 });
 
 Route::prefix('song')->group(function () {

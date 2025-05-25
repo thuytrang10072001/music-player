@@ -6,7 +6,7 @@ import { FiPlusCircle } from "react-icons/fi";
 import { FaRegClock } from "react-icons/fa6";
 
 import Layout from "../components/Layout";
-import { btnIcon } from "../utils/helper";
+import {btnIcon, formatDuration} from "../utils/helper";
 import ButtonPlay from "../components/button/ButtonPlay";
 import CardAlbum from "../components/card/CardAlbum";
 import ModalPlaylist from "../components/modal/ModalPlayList";
@@ -19,13 +19,14 @@ export default function DetailAlbum (){
     const nav =  useNavigate();
     const [showModal, setShowModal] = useState(false);
     const { id } = useParams<{ id: string }>();
-    const { data, isLoading } = useShowQuery(id);
+    const { data, isFetching } = useShowQuery(id);
     const detailAlbum = {
         picture : data?.data?.album?.picture || '',
         title: data?.data?.album?.title || '',
         artist: {
             name: data?.data?.album?.artist?.name || '',
             picture: data?.data?.album?.artist?.picture || '',
+            id:  data?.data?.album?.artist?.artist_id || '',
         },
         listAlbumRelated: data?.data?.list?.data || [],
         songs: data?.data?.album?.songs || []
@@ -33,43 +34,44 @@ export default function DetailAlbum (){
 
     const handleShow = () => setShowModal(true);
     const handleShowListAlbum = () => {
-        nav("/list-albums");
+        nav(`/related-albums/${id}`);
     }
 
     const dispatch = useDispatch();
 
-
     useEffect(() => {
-        dispatch(setLoading(isLoading));
-    }, [isLoading, dispatch]);
+        dispatch(setLoading(isFetching));
+    }, [isFetching, dispatch]);
 
     return (
         <Layout>
             <div className="flex-1 flex flex-col bg-bg overflow-hidden min-h-[calc(100vh-64px)]">
-                <Color src={detailAlbum.picture} format="hex">
-                    {({ data: dominantColor, loading, error }) => (
+                {/*<Color src={detailAlbum.picture} format="hex">*/}
+                {/*    {({ data: dominantColor, loading, error }) => (*/}
                         <div
                             className="bg-album p-4 flex gap-4"
                             style={{
-                                backgroundImage: `linear-gradient(to bottom, ${
-                                    loading || error || !dominantColor ? '#000' : dominantColor
-                                }, #000)`
+                                // backgroundImage: `linear-gradient(to bottom, ${
+                                //     loading || error || !dominantColor ? '#000' : dominantColor
+                                // }, #000)`
+                                backgroundColor: "black"
                             }}
                         >
-                            <img src={detailAlbum.picture} className="w-56 h-56 rounded-xl" />
+                            <img src={detailAlbum.picture} className="w-56 h-56 rounded-xl" loading="lazy"/>
                             <div className="info-album flex flex-column justify-content-end gap-1">
                                 <span className="text-xs font-medium">Album - 2015</span>
                                 <h1 className="text-4xl font-bold">{detailAlbum.title}</h1>
                                 <div className="info-artist flex flex-row items-center gap-2">
-                                    <img src={detailAlbum.artist.picture} className="w-10 h-10 rounded-full" />
-                                    <button className={btnIcon()}>
+                                    <img src={detailAlbum.artist.picture} className="w-10 h-10 rounded-full" loading="lazy"/>
+                                    <button className={btnIcon()}
+                                            onClick={() => nav(`/detail-artist/${detailAlbum.artist.id}`)}>
                                         <span className="text-lg font-semibold">{detailAlbum.artist.name}</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                    )}
-                </Color>
+                {/*    )}*/}
+                {/*</Color>*/}
                 <div className="action px-4 py-3 flex items-center gap-3">
                     <ButtonPlay/>
                     {FiPlusCircle({
@@ -108,7 +110,7 @@ export default function DetailAlbum (){
                                         {song.title}
                                     </td>
                                     <td className="px-6 py-2">
-                                        {song.duration}
+                                        {formatDuration(song.duration)}
                                     </td>
                                 </tr>
                             )}

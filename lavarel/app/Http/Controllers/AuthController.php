@@ -66,7 +66,7 @@ class AuthController extends Controller
                 'password' => 'required|string|max:255',
             ]);
 
-            if (!Auth::attempt($validate)) {
+            if (!Auth::attempt($validate)) { // auto call Hash::check()
                 return response()->json(['message' => 'Login failed'], 401);
             }
 
