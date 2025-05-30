@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
-import { Button } from "react-bootstrap";
 import { FiPlusCircle } from "react-icons/fi";
 import { FaRegClock } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa";
+import { Button }  from "react-bootstrap";
 import {useNavigate, useParams} from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -13,7 +14,7 @@ import ButtonPlay from "../components/button/ButtonPlay";
 import CardAlbum from "../components/card/CardAlbum";
 import { useGetArtistByIdQuery } from "../services/ArtistApi";
 import { setLoading } from "../store/LoadingSlice";
-import { formatDuration } from "../utils/helper";
+import {btnIcon, formatDuration} from "../utils/helper";
 
 export default function DetailArtist (){
     const nav =  useNavigate();
@@ -68,6 +69,8 @@ export default function DetailArtist (){
                                         style: {stroke: "white"}
                                     })}
                                 </th>
+                                <th scope="col" className="px-6 py-3">
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -78,10 +81,17 @@ export default function DetailArtist (){
                                         {index + 1}
                                     </th>
                                     <td className="px-6 py-2">
-                                        {song.title}
+                                        <Button className={btnIcon("text-sm")}>{song.title}</Button>
+                                    </td>
+                                    <td className="px-6 py-2 cursor-pointer">
+                                        {formatDuration(song.duration)}
                                     </td>
                                     <td className="px-6 py-2">
-                                        {formatDuration(song.duration)}
+                                        {FaPlus({
+                                            className: "text-1xl cursor-pointer",
+                                            style: {stroke: "white"},
+                                            onClick: handleShow
+                                        })}
                                     </td>
                                 </tr>
                             )}

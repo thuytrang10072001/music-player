@@ -4,7 +4,7 @@ export const ArtistApi = createApi({
     reducerPath: 'artistApi',
     tagTypes: ['Artist'],
     baseQuery: fetchBaseQuery({
-        baseUrl: `/api/artist`,
+        baseUrl: `${process.env.REACT_APP_LOCAL_HOST_API}/api/artist`,
     }),
     endpoints: (builder) => ({
         getListArtist: builder.query({

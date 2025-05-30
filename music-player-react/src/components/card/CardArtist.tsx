@@ -8,7 +8,7 @@ export default function CardArtist (props: PropsArtist){
     const nav = useNavigate();
 
     return (
-        <div className="card-artist p-3 block flex-shrink-0"
+        <div className="card-artist p-3 block flex-shrink-0 cursor-pointer"
             onClick={() => nav(`/detail-artist/${data.artist_id}`)}
         >
             <img

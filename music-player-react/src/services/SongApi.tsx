@@ -4,7 +4,7 @@ export const SongApi = createApi({
     reducerPath: 'songApi',
     tagTypes: ['Song'],
     baseQuery: fetchBaseQuery({
-        baseUrl: `/api/song`,
+        baseUrl: `${process.env.REACT_APP_LOCAL_HOST_API}/api/song`,
     }),
     endpoints: (builder) => ({
         getListSong: builder.query({

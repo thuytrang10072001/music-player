@@ -4,7 +4,7 @@ export const AlbumApi = createApi({
     reducerPath: 'albumApi',
     tagTypes: ['Album'],
     baseQuery: fetchBaseQuery({
-        baseUrl: `/api/album`,
+        baseUrl: `${process.env.REACT_APP_LOCAL_HOST_API}/api/album`,
     }),
     endpoints: (builder) => ({
         getList: builder.query({

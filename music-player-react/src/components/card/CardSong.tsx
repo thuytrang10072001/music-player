@@ -9,7 +9,7 @@ export default function CardSong (props: PropsSong){
 
     return (
         <div
-            className="card-album group relative p-3 flex-shrink-0 max-w-fit rounded-lg transition duration-300 hover:bg-gray-800">
+            className="card-album group relative p-3 flex-shrink-0 max-w-fit rounded-lg transition duration-300 hover:bg-gray-800 cursor-pointer">
             <div className="relative w-36 h-36">
                 <img
                     alt="name"

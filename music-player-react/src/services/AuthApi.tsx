@@ -5,7 +5,7 @@ export const AuthApi = createApi({
     reducerPath: 'authApi',
     tagTypes: ['User'],
     baseQuery: fetchBaseQuery({
-        baseUrl: '/api/auth/', // <-- gọi qua Nginx route
+        baseUrl: `${process.env.REACT_APP_LOCAL_HOST_API}/api/auth/`, // <-- gọi qua Nginx route
         // prepareHeaders: (headers) => {
         //     const token = localStorage.getItem('token')
         //     if (token) {

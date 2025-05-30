@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from "react";
+import { useDispatch } from "react-redux";
 import Color from 'color-thief-react';
 import { Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { FiPlusCircle } from "react-icons/fi";
+import {FaPlus} from "react-icons/fa";
 import { FaRegClock } from "react-icons/fa6";
 
 import Layout from "../components/Layout";
@@ -13,7 +15,7 @@ import ModalPlaylist from "../components/modal/ModalPlayList";
 import { Album, Song } from "@interfaces/index";
 import { useShowQuery } from "../services/AlbumApi";
 import { setLoading } from "../store/LoadingSlice";
-import { useDispatch } from "react-redux";
+
 
 export default function DetailAlbum (){
     const nav =  useNavigate();
@@ -97,6 +99,8 @@ export default function DetailAlbum (){
                                         style: {stroke: "white"}
                                     })}
                                 </th>
+                                <th scope="col" className="px-6 py-3">
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -107,10 +111,17 @@ export default function DetailAlbum (){
                                         {index + 1}
                                     </th>
                                     <td className="px-6 py-2">
-                                        {song.title}
+                                        <Button className={btnIcon("text-sm")}>{song.title}</Button>
                                     </td>
                                     <td className="px-6 py-2">
                                         {formatDuration(song.duration)}
+                                    </td>
+                                    <td className="px-6 py-2">
+                                        {FaPlus({
+                                            className: "text-1xl cursor-pointer",
+                                            style: {stroke: "white"},
+                                            onClick: handleShow
+                                        })}
                                     </td>
                                 </tr>
                             )}
