@@ -35,7 +35,7 @@ class ArtistController extends Controller
 
         try{
             $artist = Artist::findOrFail($id);
-            $albums = $artist->albums()->paginate($limit);
+            $albums = $artist->albums()->with('artists')->paginate($limit);
             $songs = $artist->songs()->paginate(10);
 
             return response()->json([

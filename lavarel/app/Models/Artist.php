@@ -15,9 +15,14 @@ class Artist extends Model
 
     protected $fillable = ['name', 'genre', 'spotify_id', 'picture'];
 
+//    public function albums()
+//    {
+//        return $this->hasMany(Album::class, 'artist_id');
+//    }
+
     public function albums()
     {
-        return $this->hasMany(Album::class, 'artist_id');
+        return $this->belongsToMany(Album::class, 'album_artist', 'artist_id', 'album_id');
     }
 
     public function songs()

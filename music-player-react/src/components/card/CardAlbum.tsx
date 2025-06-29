@@ -1,12 +1,22 @@
 import React from 'react';
 import { FaCirclePlay } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { PropsAlbum } from "@interfaces/index";
+import { useAudio } from "../../hooks/AudioContext";
+import { playPlaylist } from '../../store/MusicPlayerSlice';
 
 export default function CardAlbum (props: PropsAlbum){
     const { data } = props;
+    const { play } = useAudio();
     const nav = useNavigate();
+    const dispatch = useDispatch();
+    const handlePlayList = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+        dispatch(playPlaylist(data))
+        play();
+    }
 
     return (
         <div
@@ -21,6 +31,7 @@ export default function CardAlbum (props: PropsAlbum){
                 />
                 <button
                     className="rounded-xl absolute bottom-0 right-0 hidden group-hover:block transition duration-800"
+                    onClick={handlePlayList}
                 >
                     {FaCirclePlay({
                         className: "text-5xl transition duration-800",
@@ -34,10 +45,18 @@ export default function CardAlbum (props: PropsAlbum){
                 <a className="max-w-32 inline-block truncate" title={data?.title}>
                     <span className="font-semibold text-white">{data?.title}</span>
                 </a>
-                {data?.artist?.name !== '' ?
-                    <a className="max-w-32 inline-block truncate" title={data?.artist?.name}>
-                        <span className="text-xs text-gray-400">{data?.artist?.name}</span>
-                    </a> : ('')
+                {/*{data?.artists.length ?*/}
+                {/*    <a className="max-w-32 inline-block truncate" title="">*/}
+                {/*        <span className="text-xs">*/}
+                {/*            {data?.artists.map((item, index) => item.name)}*/}
+                {/*        </span>*/}
+                {/*    </a> : ('')*/}
+                {/*}*/}
+                {data.artists.map((item, index) => (
+                    <span className="text-xs">
+                        {item.name}
+                        {index !== data.artists.length - 1 ? ', ' : ''}
+                    </span>))
                 }
             </div>
         </div>

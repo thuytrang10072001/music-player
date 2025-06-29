@@ -6,7 +6,7 @@ import Layout from "../components/Layout";
 import CardAlbum from "../components/card/CardAlbum";
 import ModalAddPlaylist from "../components/modal/ModalAddPlaylist";
 import { btnIcon } from "../utils/helper";
-import { Album } from "@interfaces/index";
+import {Album, PropsAlbum} from "@interfaces/index";
 
 export default function PlayList() {
     const [show, setShow] = useState(false);
@@ -19,9 +19,7 @@ export default function PlayList() {
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
+            artists: []
         },
         {
             album_id: "dsdssdagg",
@@ -29,9 +27,7 @@ export default function PlayList() {
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
+            artists: []
         },
         {
             album_id: "dsdssdagg",
@@ -39,9 +35,7 @@ export default function PlayList() {
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
+            artists: []
         },
         {
             album_id: "dsdssdagg",
@@ -49,9 +43,8 @@ export default function PlayList() {
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
+            artists: []
+
         },
         {
             album_id: "dsdssdagg",
@@ -59,9 +52,8 @@ export default function PlayList() {
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
+            artists: []
+
         },
         {
             album_id: "dsdssdagg",
@@ -69,9 +61,8 @@ export default function PlayList() {
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
+            artists: []
+
         },
         {
             album_id: "dsdssdagg",
@@ -79,9 +70,7 @@ export default function PlayList() {
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
+            artists: []
         },
         {
             album_id: "dsdssdagg",
@@ -89,9 +78,8 @@ export default function PlayList() {
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
+            artists: []
+
         },
         {
             album_id: "dsdssdagg",
@@ -99,9 +87,8 @@ export default function PlayList() {
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
+            artists: []
+
         },
         {
             album_id: "dsdssdagg",
@@ -109,9 +96,8 @@ export default function PlayList() {
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
+            artists: []
+
         },
         {
             album_id: "dsdssdagg",
@@ -119,9 +105,8 @@ export default function PlayList() {
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
+            artists: []
+
         },
         {
             album_id: "dsdssdagg",
@@ -129,9 +114,8 @@ export default function PlayList() {
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
+            artists: []
+
         },
         {
             album_id: "dsdssdagg",
@@ -139,9 +123,8 @@ export default function PlayList() {
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
+            artists: []
+
         },
         {
             album_id: "dsdssdagg",
@@ -149,9 +132,8 @@ export default function PlayList() {
             picture: "https://i.scdn.co/image/ab6761610000e5eb385df356841aaec34a0914aa",
             title: "Into The New World",
             name: "SNSD",
-            artist: {
-                name: "SNSD"
-            }
+            artists: []
+
         },
 
     ]
@@ -166,9 +148,9 @@ export default function PlayList() {
               </div>
               <div
                   className="main-list w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-                  {test.map((playPlist: Album, index: number) => (
-                      <CardAlbum key={`playlist-${index}`} data={playPlist} />
-                  ))}
+                  {/*{test.map((playPlist: Album, index: number) => (*/}
+                  {/*    <CardAlbum key={`playlist-${index}`} data={playPlist} />*/}
+                  {/*))}*/}
                   <div className="flex items-center justify-content-center p-7">
                       <Button className={btnIcon()}
                               onClick={handleShow}

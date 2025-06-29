@@ -4,28 +4,27 @@ import { FaAnglesLeft, FaAnglesRight, FaCirclePlay,
     FaVolumeHigh,FaVolumeLow, FaVolumeXmark, FaCirclePause } from "react-icons/fa6";
 import { useSelector, useDispatch } from 'react-redux';
 
-import {togglePlay, pause, play, setVolume, setCurrentTime} from '../store/MusicPlayerSlice';
+import { useAudio } from "../hooks/AudioContext";
+import { playNext, playPrevious } from '../store/MusicPlayerSlice';
 import { RootState } from "../store/Store";
 import { btnIcon } from "../utils/helper";
 
 const ProgressBar = () => {
-    const audioRef = useRef<HTMLAudioElement | null>(null);
-    const { isPlaying, volume, currentTime, currentSong } = useSelector((state: RootState) => state.musicPlayer);
+    const { audioRef, play, pause, setVolume, setCurrentTime } = useAudio();
     const dispatch = useDispatch();
+    const { isPlaying, volume, currentTime, playlist } = useSelector((state: RootState) => state.musicPlayer);
 
     const handleTogglePlay = () => {
         if (!audioRef.current) return;
 
         if (isPlaying) {
-            audioRef.current.pause();
+            pause();
         } else {
-            audioRef.current.play();
+            play();
         }
-
-        dispatch(togglePlay());
     };
 
-    const [duration, setDuration] = useState(0);
+    const [duration, setDuration] = useState(audioRef.current.duration);
     const [showVolumeSlider, setShowVolumeSlider] = useState(false);
 
     const css = {
@@ -42,34 +41,15 @@ const ProgressBar = () => {
         return `${minutes}:${seconds}`;
     };
 
-    // Khi nhạc phát thì cập nhật currentTime và duration
-    const handleTimeUpdate = () => {
-        const audio = audioRef.current;
-        if (audio) {
-            dispatch(setCurrentTime(audio.currentTime));
-            setDuration(audio.duration || 0);
-        }
-    };
-
     const toggleVolumeSlider = () => {
         const show = showVolumeSlider
         setShowVolumeSlider(!show);
         setTimeout(() => setShowVolumeSlider(show), 3000)
     };
 
-    const handleAudioEnded = () => {
-        setCurrentTime(0);
-        dispatch(pause());
-    };
-
     const handleVolumeChange = (e:  React.ChangeEvent<HTMLInputElement>) => {
         const vol = parseFloat(e.target.value);
-
-        dispatch(setVolume(vol));
-
-        if (audioRef.current) {
-            audioRef.current.volume = vol;
-        }
+        setVolume(vol);
     };
 
     const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -79,7 +59,7 @@ const ProgressBar = () => {
         const newTime = (clickX / width) * duration;
 
         if (!audioRef.current) return;
-        audioRef.current.currentTime = newTime;
+        setCurrentTime(newTime);
     };
 
     // Tính phần trăm tiến trình
@@ -88,16 +68,16 @@ const ProgressBar = () => {
     return (
         <div className="space-y-2 w-full max-w-lg mx-auto">
              {/*Audio element*/}
-            <audio
-                ref={audioRef}
-                src={currentSong.audio}
-                onTimeUpdate={handleTimeUpdate}
-                onLoadedMetadata={handleTimeUpdate}
-                onEnded={handleAudioEnded}
-                controls
-                className="w-full mt-2"
-                hidden
-            />
+            {/*<audio*/}
+            {/*    ref={audioRef}*/}
+            {/*    src={currentSong.audio}*/}
+            {/*    onTimeUpdate={handleTimeUpdate}*/}
+            {/*    onLoadedMetadata={handleTimeUpdate}*/}
+            {/*    onEnded={handleAudioEnded}*/}
+            {/*    controls*/}
+            {/*    className="w-full mt-2"*/}
+            {/*    hidden*/}
+            {/*/>*/}
             <div className="flex items-center justify-content-end gap-2">
                 {showVolumeSlider && (
                     <input
@@ -146,7 +126,9 @@ const ProgressBar = () => {
             </div>
 
             <div className="btn-action w-full max-w-xs mx-auto flex justify-content-between">
-                <Button className={btnIcon()}>
+                <Button className={btnIcon()}
+                        onClick={() => dispatch(playPrevious())}
+                        disabled={playlist.length < 2}>
                     {FaAnglesLeft({className:css.icon})}
                 </Button>
                 <Button className={btnIcon()} onClick={handleTogglePlay}>
@@ -156,7 +138,9 @@ const ProgressBar = () => {
 
                     }
                 </Button>
-                <Button className={btnIcon()}>
+                <Button className={btnIcon()}
+                        onClick={() => dispatch(playNext())}
+                        disabled={playlist.length < 2}>
                     {FaAnglesRight({className:css.icon})}
                     {/*<FaAnglesRight className={css.icon}/>*/}
                 </Button>

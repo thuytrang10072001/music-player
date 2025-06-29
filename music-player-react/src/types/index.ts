@@ -1,4 +1,7 @@
 export interface Artist {
+    name: string
+}
+export interface Artist {
     spotify_id: string,
     name: string,
     picture: string,
@@ -6,11 +9,7 @@ export interface Artist {
 }
 
 export interface PropsArtist {
-    data: {
-        picture: string,
-        name: string,
-        artist_id: string,
-    }
+    data: Artist
 }
 
 export interface Song {
@@ -18,19 +17,16 @@ export interface Song {
     title: string,
     picture: string,
     duration: string,
-    artist: {
-        name: string
-    }
+    artists: Artist[],
+    file_path: string
 }
 
+export interface PlayList {
+    song: Song;
+    defaultPlaylist?: Song[];
+}
 export interface PropsSong {
-    data: {
-        picture: string,
-        title: string,
-        artist: {
-            name: string
-        }
-    }
+    data: Song
 }
 
 export interface Album {
@@ -38,18 +34,10 @@ export interface Album {
     title: string,
     picture: string,
     album_id: string,
-    artist: {
-        name: string
-    }
+    artists: Artist[],
+    songs: Song[]
 }
 
 export interface PropsAlbum {
-    data: {
-        picture: string,
-        title: string,
-        album_id: string,
-        artist: {
-            name: string
-        }
-    }
+    data: Album
 }

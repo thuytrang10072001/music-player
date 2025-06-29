@@ -17,11 +17,10 @@ class Song extends Model
         return $this->belongsTo(Album::class, 'album_id');
     }
 
-    public function artist()
+    public function artists()
     {
-        return $this->belongsTo(Artist::class, 'artist_id');
+        return $this->belongsToMany(Artist::class, 'song_artist', 'song_id', 'artist_id');
     }
-
     public function lyrics()
     {
         return $this->hasMany(Lyric::class, 'song_id');

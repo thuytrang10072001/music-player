@@ -10,6 +10,7 @@ services:
     volumes:
       - ./music-player-react/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./music-player-react:/app/frontend
+      - ./lavarel/public/songs:/usr/share/nginx/html/songs
     restart: unless-stopped
     networks:
       - app

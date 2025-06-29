@@ -13,7 +13,8 @@ class AlbumController extends Controller
         $limit = $request->query('limit', 50);
 
         try{
-            $albums =  Album::with('artist')->paginate($limit);
+            $albums = Album::with('artists', 'songs.artists')->paginate($limit);
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Albums fetched successfully',
@@ -33,11 +34,24 @@ class AlbumController extends Controller
         $limit = 20;
 
         try {
-            $album = Album::with(['artist', 'songs'])->findOrFail($id);
+//            $album = Album::with(['artist', 'songs'])->findOrFail($id);
+//
+//            $relatedAlbums = Album::where('artist_id', $album->artist_id)
+//                ->where('album_id', '!=', $album->id)
+//                ->with('artist')
+//                ->paginate($limit);
 
-            $relatedAlbums = Album::where('artist_id', $album->artist_id)
-                ->where('album_id', '!=', $album->id)
-                ->with('artist')
+            $album = Album::with(['artists', 'songs'])->findOrFail($id);
+
+            // Lấy tất cả artist_ids của album đó
+            $artistIds = $album->artists->pluck('artist_id')->toArray();
+
+            // Tìm related albums có ít nhất 1 artist chung
+            $relatedAlbums = Album::whereHas('artists', function ($query) use ($artistIds) {
+                $query->whereIn('artists.artist_id', $artistIds);
+            })
+                ->where('album_id', '!=', $album->album_id)
+                ->with('artists')
                 ->paginate($limit);
 
             return response()->json([
@@ -62,9 +76,18 @@ class AlbumController extends Controller
         try {
             $album = Album::findOrFail($id);
 
-            $relatedAlbums = Album::where('artist_id', $album->artist_id)
+//            $relatedAlbums = Album::where('artist_id', $album->artist_id)
+//                ->where('album_id', '!=', $album->album_id)
+//                ->with('artist')
+//                ->paginate($limit);
+
+            $artistIds = $album->artists->pluck('artist_id')->toArray();
+
+            $relatedAlbums = Album::whereHas('artists', function ($query) use ($artistIds) {
+                $query->whereIn('artists.artist_id', $artistIds);
+            })
                 ->where('album_id', '!=', $album->album_id)
-                ->with('artist')
+                ->with('artists')
                 ->paginate($limit);
 
             return response()->json([

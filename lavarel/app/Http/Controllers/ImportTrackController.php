@@ -43,69 +43,92 @@ class ImportTrackController extends Controller
 
     public function importAlbum(Request $request)
     {
-        $albumId = $request->input('album_id');
+        try {
+            $albumId = $request->input('album_id');
 
-        if (!$albumId) {
-            return response()->json(['error' => 'Album ID is required'], 400);
-        }
+            if (!$albumId) {
+                return response()->json(['error' => 'Album ID is required'], 400);
+            }
 
-        // Lấy album info
-        $albumData = $this->spotify->getAlbumById($albumId);
-        if (!isset($albumData['id'])) {
-            return response()->json(['error' => 'Album not found'], 404);
-        }
+            // Lấy album info
+            $albumData = $this->spotify->getAlbumById($albumId);
+            if (!isset($albumData['id'])) {
+                return response()->json(['error' => 'Album not found'], 404);
+            }
 
 
-        $artistData = $this->spotify->getArtistById($albumData['artists'][0]['id']);
-        if (!isset($artistData['id'])) {
-            return response()->json(['error' => 'Artist not found'], 404);
-        }
+//        $artistData = $this->spotify->getArtistById($albumData['artists'][0]['id']);
+//        if (!isset($artistData['id'])) {
+//            return response()->json(['error' => 'Artist not found'], 404);
+//        }
+//
+//        // Lưu artist trước
+//        $artist = Artist::updateOrCreate(
+//            ['spotify_id' => $artistData['id']],
+//            [
+//                'name' => $artistData['name'],
+//                'genre' => 'Unknown',
+//                'picture' => $artistData['images'][0]['url']
+//            ]
+//        );
 
-        // Lưu artist trước
-        $artist = Artist::updateOrCreate(
-            ['spotify_id' => $artistData['id']],
-            [
-                'name' => $artistData['name'],
-                'genre' => 'Unknown',
-                'picture' => $artistData['images'][0]['url']
-            ]
-        );
-
-        // Lưu album
-        $album = Album::updateOrCreate(
-            ['spotify_id' => $albumData['id']],
-            [
-                'title' => $albumData['name'],
-                'release_date' => $albumData['release_date'],
-                'artist_id' => $artist->artist_id,
-                'picture' => $albumData['images'][0]['url']
-            ]
-        );
-
-        // Lặp từng bài trong album và lưu vào database
-        $importedTracks = [];
-
-        foreach ($albumData['tracks']['items'] as $track) {
-            $song = Song::updateOrCreate(
-                ['spotify_id' => $track['id']],
+            $album = Album::updateOrCreate(
+                ['spotify_id' => $albumData['id']],
                 [
-                    'title' => $track['name'],
-                    'duration' => gmdate("H:i:s", $track['duration_ms'] / 1000),
-                    'album_id' => $album->album_id,
-                    'artist_id' => $artist->artist_id,
-                    'file_path' => null,
+                    'title' => $albumData['name'],
+                    'release_date' => $albumData['release_date'],
                     'picture' => $albumData['images'][0]['url']
                 ]
             );
 
-            $importedTracks[] = $song;
-        }
+            $artistIds = [];
 
-        return response()->json([
-            'message' => 'Album imported successfully',
-            'album' => $album,
-            'tracks' => $importedTracks
-        ]);
+            foreach ($albumData['artists'] as $artistItem) {
+                $img = $this->spotify->getArtistById($artistItem['id'])['images'][0]['url'] ?? null;
+                $artist = Artist::updateOrCreate(
+                    ['spotify_id' => $artistItem['id']],
+                    [
+                        'name' => $artistItem['name'],
+                        'genre' => 'Unknown',
+                        'picture' => $img
+                    ]
+                );
+
+                $artistIds[] = $artist->artist_id;
+            }
+
+            // Gán nhiều artist cho album
+            $album->artists()->sync($artistIds);
+
+            // Lặp từng bài trong album và lưu vào database
+            $importedTracks = [];
+
+            foreach ($albumData['tracks']['items'] as $track) {
+                $song = Song::updateOrCreate(
+                    ['spotify_id' => $track['id']],
+                    [
+                        'title' => $track['name'],
+                        'duration' => gmdate("H:i:s", $track['duration_ms'] / 1000),
+                        'album_id' => $album->album_id,
+//                        'artist_id' => $artist->artist_id,
+                        'file_path' => null,
+                        'picture' => $albumData['images'][0]['url']
+                    ]
+                );
+
+                $song->artists()->sync($artistIds);
+
+                $importedTracks[] = $song;
+            }
+
+            return response()->json([
+                'message' => 'Album imported successfully',
+                'album' => $album,
+                'tracks' => $importedTracks
+            ]);
+        }catch (\Exception $exception){
+            return response()->json(['error' => $exception->getMessage()], 400);
+        }
     }
 
     private function saveTrackToDatabase($track)

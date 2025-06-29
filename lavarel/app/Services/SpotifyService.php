@@ -57,6 +57,7 @@ class SpotifyService
         // Lấy access token
         $token = $this->getAccessToken();
 
+
         // Gửi request đến Spotify API để lấy thông tin album
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $token

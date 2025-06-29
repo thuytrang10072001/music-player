@@ -1,11 +1,21 @@
 import React from 'react';
 import { FaCirclePlay } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setCurrentSong } from '../../store/MusicPlayerSlice';
 
-import { PropsSong } from "@interfaces/index";
+import { PropsSong, Song} from "@interfaces/index";
+import { useAudio } from "../../hooks/AudioContext";
 import DropdownMenu from "../DropdownMenu";
 
 export default function CardSong (props: PropsSong){
-    const { data } = props;
+    const  { data } = props;
+    const dispatch = useDispatch();
+    const { play } = useAudio();
+    const handlePlay = () => {
+        dispatch(setCurrentSong(data));
+        play();
+    }
 
     return (
         <div
@@ -19,6 +29,7 @@ export default function CardSong (props: PropsSong){
                 />
                 <button
                     className="rounded-xl absolute bottom-0 right-0 hidden group-hover:block transition duration-800"
+                    onClick={handlePlay}
                 >
                     {FaCirclePlay({
                         className: "text-5xl transition duration-800",
@@ -31,10 +42,16 @@ export default function CardSong (props: PropsSong){
                     <a className="max-w-32 inline-block truncate">
                         <span className="font-semibold">{data?.title}</span>
                     </a>
-                    <DropdownMenu/>
+                    <DropdownMenu data={data}/>
                 </div>
-                <span className="text-xs">{data?.artist?.name}</span>
-            </div>
+                    {data.artists.map((item, index) => (
+                        <span className="text-xs">
+                            {item.name}
+                            {index !== data.artists.length - 1 ? ', ' : ''}
+                        </span>
+                        ))
+                    }
+                </div>
         </div>
     )
 }

@@ -13,7 +13,7 @@ class SongController extends Controller
         $limit = $request->query('limit', 50);
 
         try {
-            $songs = Song::with('artist')->paginate($limit);
+            $songs = Song::with('artists')->paginate($limit);
             return response()->json([
                 'status' => 'success',
                 'message' => 'Albums fetched successfully',

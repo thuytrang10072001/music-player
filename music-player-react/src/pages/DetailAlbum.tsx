@@ -12,7 +12,7 @@ import {btnIcon, formatDuration} from "../utils/helper";
 import ButtonPlay from "../components/button/ButtonPlay";
 import CardAlbum from "../components/card/CardAlbum";
 import ModalPlaylist from "../components/modal/ModalPlayList";
-import { Album, Song } from "@interfaces/index";
+import {Album, Artist, Song} from "@interfaces/index";
 import { useShowQuery } from "../services/AlbumApi";
 import { setLoading } from "../store/LoadingSlice";
 
@@ -25,11 +25,12 @@ export default function DetailAlbum (){
     const detailAlbum = {
         picture : data?.data?.album?.picture || '',
         title: data?.data?.album?.title || '',
-        artist: {
-            name: data?.data?.album?.artist?.name || '',
-            picture: data?.data?.album?.artist?.picture || '',
-            id:  data?.data?.album?.artist?.artist_id || '',
-        },
+        // artist: {
+        //     name: data?.data?.album?.artist?.name || '',
+        //     picture: data?.data?.album?.artist?.picture || '',
+        //     id:  data?.data?.album?.artist?.artist_id || '',
+        // },
+        artists: data?.data?.album?.artists,
         listAlbumRelated: data?.data?.list?.data || [],
         songs: data?.data?.album?.songs || []
     }
@@ -63,13 +64,23 @@ export default function DetailAlbum (){
                             <div className="info-album flex flex-column justify-content-end gap-1">
                                 <span className="text-xs font-medium">Album - 2015</span>
                                 <h1 className="text-4xl font-bold">{detailAlbum.title}</h1>
-                                <div className="info-artist flex flex-row items-center gap-2">
-                                    <img src={detailAlbum.artist.picture} className="w-10 h-10 rounded-full" loading="lazy"/>
-                                    <button className={btnIcon()}
-                                            onClick={() => nav(`/detail-artist/${detailAlbum.artist.id}`)}>
-                                        <span className="text-lg font-semibold">{detailAlbum.artist.name}</span>
-                                    </button>
-                                </div>
+                                {
+                                    detailAlbum?.artists?.length?
+                                        <div className="flex flex-row gap-4">
+                                            {detailAlbum.artists.map((item: Artist, index: number) =>
+                                                <div className="info-artist flex flex-row items-center gap-2">
+                                                    <img src={item.picture}
+                                                         className="w-10 h-10 rounded-full" loading="lazy"/>
+                                                    <button className={btnIcon()}
+                                                            onClick={() => nav(`/detail-artist/${item.artist_id}`)}>
+                                                        <span
+                                                            className="text-lg font-semibold">{item.name}</span>
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                        : ('')
+                                }
                             </div>
                         </div>
                 {/*    )}*/}

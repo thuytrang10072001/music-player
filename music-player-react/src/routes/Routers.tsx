@@ -18,7 +18,8 @@ import ListAlbumRelated from "../pages/ListAlbumRelated";
 import ScrollToTop from "../components/ScrollToTop";
 
 export default function Routers() {
-  return (
+
+    return (
     <Router>
         <ScrollToTop/>
         <Routes>
