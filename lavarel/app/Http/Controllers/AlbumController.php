@@ -34,14 +34,7 @@ class AlbumController extends Controller
         $limit = 20;
 
         try {
-//            $album = Album::with(['artist', 'songs'])->findOrFail($id);
-//
-//            $relatedAlbums = Album::where('artist_id', $album->artist_id)
-//                ->where('album_id', '!=', $album->id)
-//                ->with('artist')
-//                ->paginate($limit);
-
-            $album = Album::with(['artists', 'songs'])->findOrFail($id);
+            $album = Album::with(['artists', 'songs.artists'])->findOrFail($id);
 
             // Lấy tất cả artist_ids của album đó
             $artistIds = $album->artists->pluck('artist_id')->toArray();
@@ -75,11 +68,6 @@ class AlbumController extends Controller
 
         try {
             $album = Album::findOrFail($id);
-
-//            $relatedAlbums = Album::where('artist_id', $album->artist_id)
-//                ->where('album_id', '!=', $album->album_id)
-//                ->with('artist')
-//                ->paginate($limit);
 
             $artistIds = $album->artists->pluck('artist_id')->toArray();
 

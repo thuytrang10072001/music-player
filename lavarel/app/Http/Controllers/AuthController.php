@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
@@ -24,19 +25,13 @@ class AuthController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function register(Request $request): JsonResponse
+    public function register(CreateUserRequest $request): JsonResponse
     {
         try {
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|max:255|unique:users,email',
-                'password' => 'required|string|max:255',
-            ]);
-
             $user = User::create([
-                'name' => $validated['name'],
-                'email'    => $validated['email'],
-                'password' => Hash::make($validated['password']),
+                'name' => $request['name'],
+                'email'    => $request['email'],
+                'password' => Hash::make($request['password']),
                 'created_at' => now(),
             ]);
 
@@ -46,15 +41,19 @@ class AuthController extends Controller
             ], 200);
 
         } catch (ValidationException $e) {
+
             return response()->json([
                 'message' => 'Dữ liệu không hợp lệ',
                 'errors'  => $e->errors(),
             ], 422);
+
         } catch (\Exception $e) {
+
             return response()->json([
                 'message' => 'Lỗi server',
                 'error'   => $e->getMessage()
             ], 500);
+
         }
     }
 
