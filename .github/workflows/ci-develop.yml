@@ -35,27 +35,35 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker Compose
+      - name: Build & start services
         run: |
           docker compose -f docker-compose.yml up -d --build
 
-      - name: Wait for services to be ready
+      # ── Chờ DB sẵn sàng ─────────────────────────────────────────────────────
+      - name: Wait for Postgres
         run: |
-          echo "Waiting for backend to be up..."
-          sleep 20
+          for i in {1..30}; do
+            docker compose exec -T db pg_isready -U $DATABASE_USERNAME && break
+            echo "Waiting for Postgres… ($i)"
+            sleep 2
+          done
 
-      - name: Check if backend is running
-        run: curl --fail http://localhost:8080 || exit 1
-
-      - name: Run Laravel backend tests
+      # ── Migrate (nếu cần) ────────────────────────────────────────────────────
+      - name: Run migrations
         run: |
-          docker exec backend php artisan test
+          docker compose exec -T backend php artisan migrate --force
 
-      - name: Run React frontend tests (optional)
+      # ── Chạy test Laravel ───────────────────────────────────────────────────
+      - name: Run Laravel tests
         run: |
-          docker exec music-player-react npm install
-          docker exec music-player-react npm run test || echo "No tests found"
+          docker compose exec -T backend php artisan test
 
-      - name: Shutdown
+      # ── Chạy test React (nếu có) ────────────────────────────────────────────
+      - name: Run React tests
+        run: |
+          docker compose exec -T music-player-react sh -c "npm ci && npm test -- --watchAll=false"
+
+      # ── Tắt hết services ─────────────────────────────────────────────────────
+      - name: Shutdown services
         if: always()
-        run: docker compose -f docker-compose.yml down
+        run: docker compose -f docker-compose.yml down --volumes
