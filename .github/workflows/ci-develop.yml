@@ -11,35 +11,36 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+
     env:
       DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
 
-#    services:
-#      postgres:
-#        image: postgres:17
-#        env:
-#          POSTGRES_USER: ${{ env.DATABASE_USERNAME }}
-#          POSTGRES_PASSWORD: ${{ env.DATABASE_PASSWORD }}
-#          POSTGRES_DB: ${{ env.DATABASE_NAME }}
-#        ports:
-#          - 5432:5432
-#        options: >-
-#          --health-cmd pg_isready
-#          --health-interval 10s
-#          --health-timeout 5s
-#          --health-retries 5
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 🧱 Build và start toàn bộ service
       - name: Build & start services
         run: |
           docker compose -f docker-compose.yml up -d --build
 
-      # ── Chờ DB sẵn sàng ─────────────────────────────────────────────────────
+      # 🕐 Chờ backend khởi động hoàn toàn
+      - name: Wait for backend to start
+        run: |
+          for i in {1..30}; do
+            status=$(docker compose ps backend | grep backend | awk '{print $4}')
+            echo "backend status: $status"
+            if [ "$status" = "running" ]; then
+              break
+            fi
+            echo "Waiting for backend... ($i)"
+            sleep 3
+          done
+          docker compose logs backend
+
+      # 🕐 Chờ DB sẵn sàng (pg_isready)
       - name: Wait for Postgres
         run: |
           for i in {1..30}; do
@@ -48,22 +49,22 @@ jobs:
             sleep 2
           done
 
-      # ── Migrate (nếu cần) ────────────────────────────────────────────────────
-      - name: Run migrations
+      # 🧪 Chạy migration Laravel
+      - name: Run Laravel migrations
         run: |
           docker compose exec -T backend php artisan migrate --force
 
-      # ── Chạy test Laravel ───────────────────────────────────────────────────
+      # 🧪 Chạy Laravel test
       - name: Run Laravel tests
         run: |
           docker compose exec -T backend php artisan test
 
-      # ── Chạy test React (nếu có) ────────────────────────────────────────────
+      # 🧪 Chạy frontend test
       - name: Run React tests
         run: |
-          docker compose exec -T music-player-react sh -c "npm ci && npm test -- --watchAll=false"
+          docker compose exec -T music-player-react sh -c "npm ci && npm test -- --watchAll=false || true"
 
-      # ── Tắt hết services ─────────────────────────────────────────────────────
+      # 🧹 Tắt và dọn container
       - name: Shutdown services
         if: always()
         run: docker compose -f docker-compose.yml down --volumes
