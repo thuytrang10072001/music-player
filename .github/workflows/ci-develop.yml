@@ -1,0 +1,61 @@
+name: CI for Develop Branch
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: ${{ env.DATABASE_USERNAME }}
+          POSTGRES_PASSWORD: ${{ env.DATABASE_PASSWORD }}
+          POSTGRES_DB: ${{ env.DATABASE_NAME }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          docker-compose -f docker-compose.yml up -d --build
+
+      - name: Wait for services to be ready
+        run: |
+          echo "Waiting for backend to be up..."
+          sleep 20
+
+      - name: Check if backend is running
+        run: curl --fail http://localhost:8080 || exit 1
+
+      - name: Run Laravel backend tests
+        run: |
+          docker exec backend php artisan test
+
+      - name: Run React frontend tests (optional)
+        run: |
+          docker exec music-player-react npm install
+          docker exec music-player-react npm run test || echo "No tests found"
+
+      - name: Shutdown
+        if: always()
+        run: docker-compose -f docker-compose.yml down
