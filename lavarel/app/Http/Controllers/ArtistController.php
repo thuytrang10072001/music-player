@@ -10,10 +10,10 @@ class ArtistController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $limit = (int) $request->query('limit', 50);
-        $limit = max(1, min($limit, 100));
+        return $this->executeInTransaction(function () use ($request) {
+            $limit = (int) $request->query('limit', 50);
+            $limit = max(1, min($limit, 100));
 
-        try{
             $artists = Artist::paginate($limit);
 
             return response()->json([
@@ -21,19 +21,14 @@ class ArtistController extends Controller
                 'message' => 'Arists fetched successfully',
                 'list' => $artists
             ]);
-        }catch (\Exception $e){
-            return response()->json([
-                'message' => 'Error fetching artists',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        });
     }
 
     public function getAlbumsByArtistId(Request $request, int $id): JsonResponse
     {
-        $limit = (int) $request->query('limit', 50);
+        return $this->executeInTransaction(function () use ($request, $id) {
+            $limit = (int) $request->query('limit', 50);
 
-        try{
             $artist = Artist::findOrFail($id);
             $albums = $artist->albums()->with('artists')->paginate($limit);
             $songs = $artist->songs()->paginate(10);
@@ -45,10 +40,6 @@ class ArtistController extends Controller
                 'artist' => $artist,
                 'songs' => $songs
             ]);
-        }catch (\Exception $e){
-            return response()->json([
-                'message' => 'Error fetching artists',
-                'error' => $e->getMessage()
-            ], 500);        }
+        });
     }
 }

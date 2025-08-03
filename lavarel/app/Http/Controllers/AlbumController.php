@@ -10,9 +10,9 @@ class AlbumController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $limit = $request->query('limit', 50);
+        return $this->executeInTransaction(function () use ($request) {
+            $limit = $request->query('limit', 50);
 
-        try{
             $albums = Album::with('artists', 'songs.artists')->paginate($limit);
 
             return response()->json([
@@ -20,20 +20,14 @@ class AlbumController extends Controller
                 'message' => 'Albums fetched successfully',
                 'list' => $albums
             ]);
-        }catch (\Exception $e){
-            return response()->json([
-                'message' => 'Error fetching albums',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-
+        });
     }
 
     public function show(int $id): JsonResponse
     {
-        $limit = 20;
+        return $this->executeInTransaction(function () use ($id) {
+            $limit = 20;
 
-        try {
             $album = Album::with(['artists', 'songs.artists'])->findOrFail($id);
 
             // Lấy tất cả artist_ids của album đó
@@ -54,19 +48,14 @@ class AlbumController extends Controller
                     'album' => $album
                 ]
             ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        });
     }
 
     public function relatedAlbums(Request $request, int $id): JsonResponse
     {
-        $limit = $request->query('limit', 50);
+        return $this->executeInTransaction(function () use ($request, $id) {
+            $limit = $request->query('limit', 50);
 
-        try {
             $album = Album::findOrFail($id);
 
             $artistIds = $album->artists->pluck('artist_id')->toArray();
@@ -82,12 +71,6 @@ class AlbumController extends Controller
                 'message' => 'Success',
                 'list' => $relatedAlbums
             ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        });
     }
-
 }

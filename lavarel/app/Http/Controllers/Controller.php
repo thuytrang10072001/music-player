@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Validation\ValidationException;
 
 abstract class Controller
 {
@@ -23,8 +24,18 @@ abstract class Controller
             $result = $callback();
             DB::commit();
             return $result;
-        } catch (Exception $e) {
+
+        }catch (ValidationException $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Dữ liệu không hợp lệ',
+                'errors'  => $e->errors(),
+            ], 422);
+
+        }catch (Exception $e) {
             DB::rollBack();
             throw $e;
+
         }
     }}
