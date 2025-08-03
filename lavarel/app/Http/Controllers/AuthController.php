@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\CreateUserRequest;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\SocialLoginRequest;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
-use App\Models\User;
 
 
 class AuthController extends Controller
@@ -24,19 +26,13 @@ class AuthController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function register(Request $request): JsonResponse
+    public function register(CreateUserRequest $request): JsonResponse
     {
-        try {
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|max:255|unique:users,email',
-                'password' => 'required|string|max:255',
-            ]);
-
+        return $this->executeInTransaction(function () use ($request) {
             $user = User::create([
-                'name' => $validated['name'],
-                'email'    => $validated['email'],
-                'password' => Hash::make($validated['password']),
+                'name' => $request['name'],
+                'email'    => $request['email'],
+                'password' => Hash::make($request['password']),
                 'created_at' => now(),
             ]);
 
@@ -44,29 +40,15 @@ class AuthController extends Controller
                 'message' => 'register successfully',
                 'data' => $user
             ], 200);
-
-        } catch (ValidationException $e) {
-            return response()->json([
-                'message' => 'Dữ liệu không hợp lệ',
-                'errors'  => $e->errors(),
-            ], 422);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Lỗi server',
-                'error'   => $e->getMessage()
-            ], 500);
-        }
+        });
     }
 
-    public function login(Request $request): JsonResponse
+    public function login(LoginRequest $request): JsonResponse
     {
-        try {
-            $validate = $request->validate([
-                'email' => 'required|string|max:255, email',
-                'password' => 'required|string|max:255',
-            ]);
+        return $this->executeInTransaction(function () use ($request) {
+            $credentials = $request->only('email', 'password');
 
-            if (!Auth::attempt($validate)) { // auto call Hash::check()
+            if (!Auth::attempt($credentials)) {
                 return response()->json(['message' => 'Login failed'], 401);
             }
 
@@ -79,33 +61,20 @@ class AuthController extends Controller
                 'name' => $user->name,
                 'token' => $token
             ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        });
     }
 
-    public function socialLogin(Request $request): JsonResponse
+    public function socialLogin(SocialLoginRequest $request): JsonResponse
     {
-        try {
-            $validated = $request->validate([
-                'email' => 'required|email|max:255',
-                'name' => 'nullable|string|max:255',
-                'provider' => 'required|string|in:google,github',
-                'picture' => 'nullable|string',
-            ]);
-
-            $user = User::where('email', $validated['email'])->first();
+        return $this->executeInTransaction(function () use ($request) {
+            $user = User::where('email', $request['email'])->first();
 
             if (!$user) {
                 $user = User::create([
-                    'email' => $validated['email'],
-                    'name' => $validated['name'] ?? 'No Name',
-                    'provider' => $validated['provider'],
-                    'picture' => $validated['picture'] ?? null,
+                    'email' => $request['email'],
+                    'name' => $request['name'] ?? 'No Name',
+                    'provider' => $request['provider'],
+                    'picture' => $request['picture'] ?? null,
                     'password' => bcrypt(Str::random(12))
                 ]);
             }
@@ -117,13 +86,7 @@ class AuthController extends Controller
                 'name' => $user->name,
                 'token' => $token
             ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        });
     }
 
     /**
@@ -131,13 +94,16 @@ class AuthController extends Controller
      */
     public function show(string $id)
     {
-        $user = User::find($id);
-        if (!$user) {
-            return response()->json([
-                'message' => 'Not found'
-            ], 404);
-        }
-        return response()->json($user);
+        return $this->executeInTransaction(function () use ($id) {
+            $user = User::find($id);
+
+            if (!$user) {
+                return response()->json([
+                    'message' => 'Not found'
+                ], 404);
+            }
+            return response()->json($user);
+        });
     }
 
     /**
@@ -151,22 +117,25 @@ class AuthController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(LoginRequest $request, string $id)
     {
-        $user = User::find($id);
-        if (!$user) {
+        return $this->executeInTransaction(function () use ($request, $id) {
+            $user = User::find($id);
+            if (!$user) {
+                return response()->json([
+                    'message' => 'Not found'
+                ], 404);
+            }
+
+            $credentials = $request->only('name');
+            $user->update($credentials);
+
             return response()->json([
-                'message' => 'Not found'
-            ], 404);
-        }
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
-        $user->update($validated);
-        return response()->json([
-            'message' => 'Update successfully',
-            'data' => $user
-        ], 200);
+                'message' => 'Update successfully',
+                'data' => $user
+            ], 200);
+        });
+
     }
 
     /**

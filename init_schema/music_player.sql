@@ -7,11 +7,6 @@ CREATE TABLE "public"."album_artist" (
                                          CONSTRAINT "album_artist_pkey" PRIMARY KEY ("album_id", "artist_id")
 ) WITH (oids = false);
 
-INSERT INTO "album_artist" ("album_id", "artist_id") VALUES
-                                                         (1,	1),
-                                                         (2,	2),
-                                                         (2,	3),
-                                                         (3,	4);
 
 DROP TABLE IF EXISTS "albums";
 CREATE TABLE "public"."albums" (
@@ -23,10 +18,6 @@ CREATE TABLE "public"."albums" (
                                    CONSTRAINT "albums_pkey" PRIMARY KEY ("album_id")
 ) WITH (oids = false);
 
-INSERT INTO "albums" ("album_id", "title", "release_date", "picture", "spotify_id") VALUES
-                                                                                        (1,	'Tell Me Moon',	'2025-02-21',	'https://i.scdn.co/image/ab67616d0000b273598762e4f6744b359145084a',	'2kHHOGhg3nC4LawypsYdqC'),
-                                                                                        (2,	'เรื่องเล่าของเจ้าหญิง (A Princess'' Tale) [เพลงประกอบซีรีส์ "Pluto นิทาน ดวงดาว ความรัก"]',	'2024-10-30',	'https://i.scdn.co/image/ab67616d0000b27313254ce60b7885cccef857da',	'4Qvmi0BXFCX03s4ReFOxiD'),
-                                                                                        (3,	'Why - The 2nd Mini Album',	'2016-06-28',	'https://i.scdn.co/image/ab67616d0000b273e4915763c3c7f7a05cc93885',	'1ukBQWhQwWKqTGgs0YzRzU');
 
 DROP TABLE IF EXISTS "artists";
 CREATE TABLE "public"."artists" (
@@ -38,11 +29,6 @@ CREATE TABLE "public"."artists" (
                                     CONSTRAINT "artists_pkey" PRIMARY KEY ("artist_id")
 ) WITH (oids = false);
 
-INSERT INTO "artists" ("artist_id", "name", "genre", "picture", "spotify_id") VALUES
-                                                                                  (1,	'Okomo P',	'Unknown',	'https://i.scdn.co/image/ab67616d0000b273598762e4f6744b359145084a',	'71wrDZRYadma6qaodkVHev'),
-                                                                                  (2,	'Namtan Tipnaree',	'Unknown',	'https://i.scdn.co/image/ab67616d0000b27313254ce60b7885cccef857da',	'3nJfC4MkZ0lmOpYMs5IXKe'),
-                                                                                  (3,	'Film Rachanun',	'Unknown',	'https://i.scdn.co/image/ab67616d0000b27313254ce60b7885cccef857da',	'0AjdwTUow88qbVEDXifQAy'),
-                                                                                  (4,	'TAEYEON',	'Unknown',	'https://i.scdn.co/image/ab6761610000e5ebb5d9ebbbbe3fff5a330b40c8',	'3qNVuliS40BLgXGxhdBdqu');
 
 DROP TABLE IF EXISTS "lyrics";
 CREATE TABLE "public"."lyrics" (
@@ -78,17 +64,6 @@ CREATE TABLE "public"."song_artist" (
                                         CONSTRAINT "song_artist_pkey" PRIMARY KEY ("song_id", "artist_id")
 ) WITH (oids = false);
 
-INSERT INTO "song_artist" ("song_id", "artist_id") VALUES
-                                                       (1,	1),
-                                                       (2,	2),
-                                                       (2,	3),
-                                                       (3,	4),
-                                                       (4,	4),
-                                                       (5,	4),
-                                                       (6,	4),
-                                                       (7,	4),
-                                                       (8,	4),
-                                                       (9,	4);
 
 DROP TABLE IF EXISTS "song_history";
 CREATE TABLE "public"."song_history" (
@@ -112,29 +87,24 @@ CREATE TABLE "public"."songs" (
                                   CONSTRAINT "songs_pkey" PRIMARY KEY ("song_id")
 ) WITH (oids = false);
 
-INSERT INTO "songs" ("song_id", "title", "duration", "album_id", "file_path", "spotify_id", "picture") VALUES
-                                                                                                           (1,	'Tell Me Moon',	'00:04:24',	1,	'/songs/OKOMO P - Tell Me Moon.mp3',	'1vTnzA7PVfr4GG62cvTAy4',	'https://i.scdn.co/image/ab67616d0000b273598762e4f6744b359145084a'),
-                                                                                                           (2,	'เรื่องเล่าของเจ้าหญิง (A Princess'' Tale) - เพลงประกอบซีรีส์ "Pluto นิทาน ดวงดาว ความรัก"',	'00:03:37',	2,	'/songs/Pluto''s OST. A princesss tale.mp3',	'65bTNAQUxdExNka5guhsEF',	'https://i.scdn.co/image/ab67616d0000b27313254ce60b7885cccef857da'),
-                                                                                                           (4,	'Starlight',	'00:03:43',	3,	'/songs/Starlight  (Feat. DEAN).mp3',	'5MYL9WejirHj0kc8crJPJ0',	'https://i.scdn.co/image/ab67616d0000b273e4915763c3c7f7a05cc93885'),
-                                                                                                           (5,	'Fashion',	'00:03:12',	3,	'/songs/Fashion.mp3',	'4AEvnRVdOq4GHx5vFvDDTh',	'https://i.scdn.co/image/ab67616d0000b273e4915763c3c7f7a05cc93885'),
-                                                                                                           (6,	'Hands on Me',	'00:03:48',	3,	'/songs/Hands on Me.mp3',	'4meLiOL9ns3ZvlldHcSB9p',	'https://i.scdn.co/image/ab67616d0000b273e4915763c3c7f7a05cc93885'),
-                                                                                                           (7,	'Up & Down',	'00:02:53',	3,	'/songs/Up & Down.mp3',	'2T20Nb7QlVK8K6pRSiDl8N',	'https://i.scdn.co/image/ab67616d0000b273e4915763c3c7f7a05cc93885'),
-                                                                                                           (8,	'Good Thing',	'00:02:57',	3,	'/songs/Good Thing.mp3',	'30CAqzLOdc8LbPRzchYaAt',	'https://i.scdn.co/image/ab67616d0000b273e4915763c3c7f7a05cc93885'),
-                                                                                                           (9,	'Night',	'00:03:13',	3,	'/songs/Night.mp3',	'26X50tiIvOem3M7pvJ2bm5',	'https://i.scdn.co/image/ab67616d0000b273e4915763c3c7f7a05cc93885'),
-                                                                                                           (3,	'Why',	'00:03:27',	3,	'/songs/태연 ''Why''.mp3',	'4eiPbjcTEJDQcsv7WV0vfD',	'https://i.scdn.co/image/ab67616d0000b273e4915763c3c7f7a05cc93885');
 
 DROP TABLE IF EXISTS "users";
+DROP SEQUENCE IF EXISTS users_id_seq;
+CREATE SEQUENCE users_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1;
+
 CREATE TABLE "public"."users" (
-                                  "id" integer DEFAULT GENERATED BY DEFAULT AS IDENTITY NOT NULL,
-                                  "username" character varying(50),
-                                  "email" character varying(100),
-                                  "password" character varying(255),
-                                  "created_at" timestamp,
+                                  "id" bigint DEFAULT nextval('users_id_seq') NOT NULL,
+                                  "name" character varying(255) NOT NULL,
+                                  "email" character varying(255) NOT NULL,
+                                  "email_verified_at" timestamp(0),
+                                  "password" character varying(255) NOT NULL,
+                                  "remember_token" character varying(100),
+                                  "created_at" timestamp(0),
+                                  "updated_at" timestamp(0),
                                   "picture" character varying(255),
-                                  "provider" character varying(20),
-                                  CONSTRAINT "users_email_key" UNIQUE ("email"),
-                                  CONSTRAINT "users_pkey" PRIMARY KEY ("id"),
-                                  CONSTRAINT "users_username_key" UNIQUE ("username")
+                                  "provider" character varying(255),
+                                  CONSTRAINT "users_email_unique" UNIQUE ("email"),
+                                  CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 ) WITH (oids = false);
 
 
@@ -157,4 +127,4 @@ ALTER TABLE ONLY "public"."song_history" ADD CONSTRAINT "song_history_user_id_fk
 
 ALTER TABLE ONLY "public"."songs" ADD CONSTRAINT "songs_album_id_fkey" FOREIGN KEY (album_id) REFERENCES albums(album_id) NOT DEFERRABLE;
 
--- 2025-06-29 14:12:10.942543+00
+-- 2025-08-03 12:38:45.461175+00

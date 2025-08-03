@@ -43,38 +43,24 @@ class ImportTrackController extends Controller
 
     public function importAlbum(Request $request)
     {
-        try {
+        return $this->executeInTransaction(function () use ($request) {
             $albumId = $request->input('album_id');
-
             if (!$albumId) {
                 return response()->json(['error' => 'Album ID is required'], 400);
             }
 
-            // Lấy album info
             $albumData = $this->spotify->getAlbumById($albumId);
             if (!isset($albumData['id'])) {
                 return response()->json(['error' => 'Album not found'], 404);
             }
 
+            if(Album::where('spotify_id', $albumData['id'])->first()){
+                return response()->json(['error' => 'Album existed!'], 404);
+            }
 
-//        $artistData = $this->spotify->getArtistById($albumData['artists'][0]['id']);
-//        if (!isset($artistData['id'])) {
-//            return response()->json(['error' => 'Artist not found'], 404);
-//        }
-//
-//        // Lưu artist trước
-//        $artist = Artist::updateOrCreate(
-//            ['spotify_id' => $artistData['id']],
-//            [
-//                'name' => $artistData['name'],
-//                'genre' => 'Unknown',
-//                'picture' => $artistData['images'][0]['url']
-//            ]
-//        );
-
-            $album = Album::updateOrCreate(
-                ['spotify_id' => $albumData['id']],
+            $album = Album::create(
                 [
+                    'spotify_id' => $albumData['id'],
                     'title' => $albumData['name'],
                     'release_date' => $albumData['release_date'],
                     'picture' => $albumData['images'][0]['url']
@@ -85,14 +71,19 @@ class ImportTrackController extends Controller
 
             foreach ($albumData['artists'] as $artistItem) {
                 $img = $this->spotify->getArtistById($artistItem['id'])['images'][0]['url'] ?? null;
-                $artist = Artist::updateOrCreate(
-                    ['spotify_id' => $artistItem['id']],
-                    [
+
+                $existingArtist = Artist::where('spotify_id', $artistItem['id'])->first();
+
+                if (!$existingArtist) {
+                    $artist = Artist::create([
+                        'spotify_id' => $artistItem['id'],
                         'name' => $artistItem['name'],
                         'genre' => 'Unknown',
                         'picture' => $img
-                    ]
-                );
+                    ]);
+                } else {
+                    $artist = $existingArtist;
+                }
 
                 $artistIds[] = $artist->artist_id;
             }
@@ -104,19 +95,24 @@ class ImportTrackController extends Controller
             $importedTracks = [];
 
             foreach ($albumData['tracks']['items'] as $track) {
-                $song = Song::updateOrCreate(
-                    ['spotify_id' => $track['id']],
+                $song = Song::create(
                     [
+                        'spotify_id' => $track['id'],
                         'title' => $track['name'],
                         'duration' => gmdate("H:i:s", $track['duration_ms'] / 1000),
                         'album_id' => $album->album_id,
-//                        'artist_id' => $artist->artist_id,
                         'file_path' => null,
                         'picture' => $albumData['images'][0]['url']
                     ]
                 );
 
-                $song->artists()->sync($artistIds);
+                $trackArtistIds = [];
+                foreach ($track['artists'] as $trackArtist) {
+                    $artist = Artist::where('spotify_id', $trackArtist['id'])->first();
+                    $trackArtistIds[] = $artist->artist_id;
+                }
+
+                $song->artists()->sync($trackArtistIds);
 
                 $importedTracks[] = $song;
             }
@@ -126,9 +122,7 @@ class ImportTrackController extends Controller
                 'album' => $album,
                 'tracks' => $importedTracks
             ]);
-        }catch (\Exception $exception){
-            return response()->json(['error' => $exception->getMessage()], 400);
-        }
+        });
     }
 
     private function saveTrackToDatabase($track)
