@@ -37,7 +37,7 @@ jobs:
 
       - name: Set up Docker Compose
         run: |
-          docker-compose -f docker-compose.yml up -d --build
+          docker compose -f docker-compose.yml up -d --build
 
       - name: Wait for services to be ready
         run: |
@@ -58,4 +58,4 @@ jobs:
 
       - name: Shutdown
         if: always()
-        run: docker-compose -f docker-compose.yml down
+        run: docker compose -f docker-compose.yml down
