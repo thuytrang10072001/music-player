@@ -43,7 +43,9 @@ RUN apt-get install -y libpq-dev \
 COPY ./composer.json ./composer.lock /app/backend/
 
 # Run composer install first
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+RUN #composer install --no-interaction --prefer-dist --optimize-autoloader
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader || cat /app/backend/composer.lock || echo "Composer install failed"
+
 
 # Copy source code  container
 COPY . /app/backend
