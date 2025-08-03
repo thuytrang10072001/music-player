@@ -16,20 +16,20 @@ jobs:
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
 
-    services:
-      postgres:
-        image: postgres:17
-        env:
-          POSTGRES_USER: ${{ env.DATABASE_USERNAME }}
-          POSTGRES_PASSWORD: ${{ env.DATABASE_PASSWORD }}
-          POSTGRES_DB: ${{ env.DATABASE_NAME }}
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+#    services:
+#      postgres:
+#        image: postgres:17
+#        env:
+#          POSTGRES_USER: ${{ env.DATABASE_USERNAME }}
+#          POSTGRES_PASSWORD: ${{ env.DATABASE_PASSWORD }}
+#          POSTGRES_DB: ${{ env.DATABASE_NAME }}
+#        ports:
+#          - 5432:5432
+#        options: >-
+#          --health-cmd pg_isready
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
 
     steps:
       - name: Checkout code
