@@ -40,7 +40,7 @@ RUN apt-get install -y libpq-dev \
     && docker-php-ext-install pdo pdo_pgsql pgsql
 
 # Copy only composer files first
-COPY backend/composer.json backend/composer.lock /app/backend/
+COPY ./composer.json ./composer.lock /app/backend/
 
 # Run composer install first
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
