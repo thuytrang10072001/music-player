@@ -2,44 +2,30 @@ FROM php:8.2.11-fpm
 
 WORKDIR /app/backend
 
-# Install composer
-RUN echo "\e[1;33mInstall COMPOSER\e[0m"
-RUN cd /tmp \
-    && curl -sS https://getcomposer.org/installer | php \
-    && mv composer.phar /usr/local/bin/composer
+# Install COMPOSER
+RUN apt-get update && apt-get -y install curl
+RUN curl -sS https://getcomposer.org/installer | php && \
+    mv composer.phar /usr/local/bin/composer
 
-#RUN docker-php-ext-install pdo pdo_mysql
+# Install useful tools and libraries
+RUN apt-get -y install apt-utils nano wget dialog vim \
+    build-essential git libcurl4 libcurl4-openssl-dev \
+    zlib1g-dev libzip-dev zip libbz2-dev locales \
+    libicu-dev libonig-dev libxml2-dev libpq-dev
 
-RUN apt-get update
+# Install PHP extensions
+RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
+    docker-php-ext-install pdo pdo_pgsql pgsql
 
-# Install useful tools
-RUN apt-get -y install apt-utils nano wget dialog vim
+# Copy only composer files first
+COPY composer.json composer.lock ./
 
-# Install important libraries
-RUN echo "\e[1;33mInstall important libraries\e[0m"
-RUN apt-get -y install --fix-missing \
-    apt-utils \
-    build-essential \
-    git \
-    curl \
-    libcurl4 \
-    libcurl4-openssl-dev \
-    zlib1g-dev \
-    libzip-dev \
-    zip \
-    libbz2-dev \
-    locales \
-    libmcrypt-dev \
-    libicu-dev \
-    libonig-dev \
-    libxml2-dev
+# Install dependencies without running post scripts (like artisan commands)
+RUN composer install --no-interaction --prefer-dist --no-scripts
 
-# Install Postgre PDO
-RUN apt-get install -y libpq-dev \
-    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install pdo pdo_pgsql pgsql
+# Copy all remaining app files including artisan
+COPY . .
 
-# Copy source code  container
-COPY . /app/backend
-
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+# Now run the full install with scripts
+RUN composer dump-autoload --optimize && \
+    php artisan package:discover --ansi || true
