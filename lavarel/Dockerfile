@@ -17,8 +17,15 @@ RUN apt-get -y install apt-utils nano wget dialog vim \
 RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
     docker-php-ext-install pdo pdo_pgsql pgsql
 
-# 🔥 Copy all source code into container (including artisan)
-COPY . /app/backend
+# Copy only composer files first
+COPY composer.json composer.lock ./app/backend/
 
-# ✅ Composer install (ensure artisan exists now)
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+# Install dependencies without running post scripts (like artisan commands)
+RUN composer install --no-interaction --prefer-dist --no-scripts
+
+# Copy all remaining app files including artisan
+COPY . ./app/backend
+
+# Now run the full install with scripts
+RUN composer dump-autoload --optimize && \
+    php artisan package:discover --ansi || true
