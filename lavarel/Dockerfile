@@ -18,13 +18,13 @@ RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
     docker-php-ext-install pdo pdo_pgsql pgsql
 
 # Copy only composer files first
-COPY composer.json composer.lock ./app/backend/
+COPY composer.json composer.lock ./
 
 # Install dependencies without running post scripts (like artisan commands)
 RUN composer install --no-interaction --prefer-dist --no-scripts
 
 # Copy all remaining app files including artisan
-COPY . ./app/backend
+COPY . .
 
 # Now run the full install with scripts
 RUN composer dump-autoload --optimize && \
